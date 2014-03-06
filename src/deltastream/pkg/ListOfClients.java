@@ -208,7 +208,10 @@ class ListOfClients{
                 myNewestPartId = broadcast.parts.newestPartId;
                 myPartsBitSet = broadcast.parts.GetPartsAsBitSet();
             }
-            
+            if(myPartsBitSet.isEmpty()){
+                System.out.println("MyBitset empty");
+                return -1;
+            }
             
             byte[] myParts = myPartsBitSet.toByteArray();
             byte[] hisParts = bitFieldParts.toByteArray();
