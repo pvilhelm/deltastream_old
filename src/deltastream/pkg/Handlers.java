@@ -44,12 +44,14 @@ class UploadHandler implements Runnable{
             catch(Exception ee){
                 continue;
             }
+            if(clientToUploadTo==null)
+                continue;
+            
             
             if(clientToUploadTo.uploadQue.size()>12) // TODO <------------- make this changeable from config
                 continue;
 
-            if(clientToUploadTo==null)
-                continue;
+            
             long time = new Date().getTime();
             if(clientToUploadTo.lastBitSet.getTime()+5000< time){
                 if(!clientToUploadTo.uploadQue.contains('q') && (clientToUploadTo.lastPartListRequested.getTime() + 2000 < time))
