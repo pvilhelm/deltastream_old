@@ -69,7 +69,7 @@ class UploadHandler implements Runnable{
             
             if(clientToUploadTo.uploadQue.size()<12){ // <------------- make this changeable from config
                 synchronized (clientToUploadTo){
-                    clientToUploadTo.PutUlQue('x');
+                    clientToUploadTo.PutUlQue('x'); 
                     clientToUploadTo.PutUlQue(partToUploadNr);
                 }
                  

@@ -81,9 +81,7 @@ public class DeltastreamServer{
         
         //init upload handler
         //will upload to known clients at "random"==smart algortim
-        /*UploadHandler uploadHandler = new UploadHandler(broadcast);
-        Thread uploadHandlerThread = new Thread(uploadHandler,"Handle uploads");
-        uploadHandlerThread.start();*/
+        
 
         try{
             Thread.sleep(2000);
@@ -91,10 +89,16 @@ public class DeltastreamServer{
         catch(Exception ee){}
         
         ListOfClients.Client client2 = broadcast.listOfClients.AddClient("94.254.41.186");
-        Handlers.ConnectToClient(client2,broadcast);
+        Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
+        thread.start();
+         
         client2.SendListOfParts('q');
         client2.GetListOfParts();
         //broadcast.listOfClients.clientHashtable.get("94.254.41.219").CloseGenConnTCP();
+        
+        UploadHandler uploadHandler = new UploadHandler(broadcast);
+        Thread uploadHandlerThread = new Thread(uploadHandler,"Handle uploads");
+        uploadHandlerThread.start();
         
          //w8 for new incoming connections 
         for(;;){

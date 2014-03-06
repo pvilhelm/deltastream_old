@@ -348,10 +348,11 @@ class ListOfClients{
                 System.out.println("Coulnt read length of array of bits of parts, connection error: "+ee);
             }
 
-             
-
+            if(lengthData<0)
+                return;
+                
             byte[] arrByteBitParts = new byte[lengthData]; //read a little endian bit array of parts
-
+            
             int readBytes = 0;
             try{
                 readBytes = this.IS.read(arrByteBitParts);
