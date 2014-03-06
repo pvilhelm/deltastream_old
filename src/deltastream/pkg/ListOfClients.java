@@ -61,6 +61,10 @@ class ListOfClients{
         Date firstContact;
         Date lastContact;
         Date lastBitSet;
+        Date lastPartListRequested;
+        Date lastPartSentToClient;
+        Date lastPartAquiredFromClient;
+        Date lastKeyRqSentToClient;
         BitSet bitFieldParts;
         int partIdOffset;
         Broadcast broadcast; //the broadcast the client belongs to
@@ -73,8 +77,10 @@ class ListOfClients{
         Thread dlThread;
         
         Client(Broadcast broadcast){
-            lastContact = new Date(); //when the client connected
-            firstContact = new Date();
+            lastContact = new Date(0); //when the client connected
+            firstContact = new Date(0);
+            lastPartSentToClient = new Date(0);
+            lastPartListRequested = new Date(0);
             this.broadcast = broadcast;
             bitFieldParts = new BitSet(100);
             lockUPDL = new Object();
@@ -288,7 +294,7 @@ class ListOfClients{
                 //OS.write(allPartsBitSetAsByteArray,0,allPartsBitSetAsByteArray.length);
                 OSData.write(allPartsBitSetAsByteArray);
                 OSData.flush();
-                 
+                lastPartListRequested = new Date(); //update last time we req part list
                 System.out.println("Sent list of parts");
             }
             catch(Exception ee){
@@ -297,7 +303,7 @@ class ListOfClients{
             UpdateLastContact();
         }
         
-        void CreateGenConnTCP(){ //creates a tcp connection on general port with clietn
+        /*void CreateGenConnTCP(){ //creates a tcp connection on general port with clietn
             try{
                 Socket socket = new Socket(IP,broadcast.config.clientServerSocketPort);
                 IS = new BufferedInputStream(socket.getInputStream());
@@ -308,9 +314,9 @@ class ListOfClients{
             catch(Exception ee){
                 System.out.println("Couldnt create TCP connection with client"+ee.toString());
             }               
-        }
+        }*/
         
-        void CloseGenConnTCP(){
+        /*void CloseGenConnTCP(){
             try{
             IS.close();
             //OS.close();
@@ -318,7 +324,7 @@ class ListOfClients{
             catch(Exception ee){
                 System.out.println("Coudlnt close socekts"+ee);
             }
-        }
+        }*/
      
         
         void GetListOfParts(){
@@ -360,6 +366,7 @@ class ListOfClients{
             UpdateLastContact();
             lastBitSet = new Date(); //new time for last bitset
             System.out.println("Got list of parts");
+             
         }
         void Drop(){
             //drop the client from the list

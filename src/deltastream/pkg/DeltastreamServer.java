@@ -90,10 +90,10 @@ public class DeltastreamServer{
         }
         catch(Exception ee){}
         
-        broadcast.listOfClients.AddClient("94.254.41.186");
-        broadcast.listOfClients.clientHashtable.get("94.254.41.186").CreateGenConnTCP();
-        broadcast.listOfClients.clientHashtable.get("94.254.41.186").SendListOfParts('q');
-        broadcast.listOfClients.clientHashtable.get("94.254.41.186").GetListOfParts();
+        ListOfClients.Client client2 = broadcast.listOfClients.AddClient("94.254.41.186");
+        Handlers.ConnectToClient(client2,broadcast);
+        client2.SendListOfParts('q');
+        client2.GetListOfParts();
         //broadcast.listOfClients.clientHashtable.get("94.254.41.219").CloseGenConnTCP();
         
          //w8 for new incoming connections 

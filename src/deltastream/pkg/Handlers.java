@@ -47,8 +47,9 @@ class UploadHandler implements Runnable{
 
             if(clientToUploadTo==null)
                 continue;
-            if(clientToUploadTo.lastBitSet.getTime()+5000< new Date().getTime()){
-                if(!clientToUploadTo.uploadQue.contains('q'))
+            long time = new Date().getTime();
+            if(clientToUploadTo.lastBitSet.getTime()+5000< time){
+                if(!clientToUploadTo.uploadQue.contains('q') && (clientToUploadTo.lastPartListRequested.getTime() + 2000 < time))
                     clientToUploadTo.PutUlQue('q'); //TODO if it doenst put in queue, dont do rest!!!
                 if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){ //check if a upload thread is alive or make on
                     synchronized(clientToUploadTo){
@@ -106,6 +107,7 @@ class ConnectToClient implements Runnable{
                         client.socket = socket;
                         client.OS = new BufferedOutputStream(socket.getOutputStream());
                         client.IS = new BufferedInputStream(socket.getInputStream());
+                        client.socket.setSoTimeout(0);//TODO remeber to remove/set lower
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt create streams in ConnectedToClient");
