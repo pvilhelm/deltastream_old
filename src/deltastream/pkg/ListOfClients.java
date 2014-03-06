@@ -90,7 +90,7 @@ class ListOfClients{
             clientSessionId = rand.nextInt();
         }
         
-        boolean PutDlQue(int type){
+        synchronized boolean PutDlQue(int type){
             try{
                 uploadQue.put(type);
             }
@@ -115,9 +115,21 @@ class ListOfClients{
             return uploadQue.remainingCapacity()>=n;
         }*/
         
-        boolean PutUlQue(int type){
+        synchronized boolean PutUlQue(int type){
             try{
                 uploadQue.put(type);
+                return true;
+            }
+            catch(Exception ee){
+                //System.out.println("Que ul full");
+                return false;
+            }
+        }
+        
+        synchronized boolean PutUlQue(int first, int sec){
+            try{
+                uploadQue.put(first);
+                uploadQue.put(sec);
                 return true;
             }
             catch(Exception ee){
@@ -142,6 +154,7 @@ class ListOfClients{
                 outData.writeLong(broadcast.broadcastId); //writes broadcast ID
                 outData.writeByte('c');//type of message
                 outData.writeInt(partNr);
+                outData.flush();
                 System.out.println("confirmed part rq");
             }
             catch(Exception ee){
@@ -155,6 +168,7 @@ class ListOfClients{
                 outData.writeLong(broadcast.broadcastId); //writes broadcast ID
                 outData.writeByte('d');//type of message
                 outData.writeInt(partNr);
+                outData.flush();
                 System.out.println("Declined part rq");
             }
             catch(Exception ee){
@@ -172,6 +186,7 @@ class ListOfClients{
                 outData.writeLong(broadcast.broadcastId); //writes broadcast ID
                 outData.writeByte('x');//type of message
                 outData.writeInt(PartN);
+                outData.flush();
                 System.out.println("Ask if he wants part "+PartN);
             }
             catch(Exception ee){
@@ -253,6 +268,7 @@ class ListOfClients{
                 outData.writeShort(partToUpload.data.length);
                 //sign here
                 OS2.write(partToUpload.data);
+                outData.flush();
                 System.out.println("Sent part: " + partToUpload.partN);
             }
             catch(Exception ee){
@@ -272,6 +288,7 @@ class ListOfClients{
                 outData.writeShort(part.data.length);
                 //sign here
                 OS2.write(part.data);
+                outData.flush();
                 System.out.println("Sent part: " + part.partN);
             }
             catch(Exception ee){
@@ -287,6 +304,7 @@ class ListOfClients{
                 OSData.writeShort(1028);
                 OSData.writeByte(1); //DSA == 1
                 OSData.write(broadcast.pub.getEncoded());
+                OSData.flush();
                 System.out.println("Sent key");
             }
             catch(Exception ee){

@@ -126,19 +126,19 @@ class ClientDownloadHandler implements Runnable{
                         return;
                     }
                     if(broadcast.parts.allParts.contains(partN)){
-                        synchronized (client){
+                        
                             client.PutUlQue('c');
                             client.PutUlQue(partN);
                             System.out.println("Dont have that part accepted");
 
-                        }
+                        
                     }
                     else{
-                        synchronized (client){
+                        
                             client.PutUlQue('d');
                             client.PutUlQue(partN); 
                             System.out.println("Have that part declined");
-                        }
+                        
                     }
                     break;
                 case 'd'://the client didnt want the part
@@ -161,10 +161,10 @@ class ClientDownloadHandler implements Runnable{
                     }
                     if(partN==-1)
                         break;
-                    synchronized (client){
+                    
                         client.PutUlQue('p');
                         client.PutUlQue(partN);
-                    }
+                    
                     break;
                 default:
                     System.out.println("Error: Message wrong format, no type");

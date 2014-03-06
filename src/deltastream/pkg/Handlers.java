@@ -44,6 +44,9 @@ class UploadHandler implements Runnable{
             catch(Exception ee){
                 continue;
             }
+            
+            if(clientToUploadTo.uploadQue.size()>12) // TODO <------------- make this changeable from config
+                continue;
 
             if(clientToUploadTo==null)
                 continue;
@@ -67,21 +70,18 @@ class UploadHandler implements Runnable{
             if(partToUploadNr==-1)
                 continue;
             
-            if(clientToUploadTo.uploadQue.size()<12){ // <------------- make this changeable from config
-                synchronized (clientToUploadTo){
-                    clientToUploadTo.PutUlQue('x'); 
-                    clientToUploadTo.PutUlQue(partToUploadNr);
-                }
-                 
-                if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
-                    synchronized(clientToUploadTo){
-                        if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
-                            Thread thread = new Thread(new ConnectToClient(clientToUploadTo,broadcast),"Make connection thread");
-                            thread.start();
-                        }
+            
+                
+            clientToUploadTo.PutUlQue('x',partToUploadNr); 
+            if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
+                synchronized(clientToUploadTo){
+                    if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
+                        Thread thread = new Thread(new ConnectToClient(clientToUploadTo,broadcast),"Make connection thread");
+                        thread.start();
                     }
-                } 
-            }
+                }
+            } 
+            
         }
     }
 }   
