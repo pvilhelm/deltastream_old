@@ -82,6 +82,9 @@ public class ClientUploadHandler implements Runnable{
                  case 'k'://request public key from some one
                      //TODO
                      break;
+                 case 'd'://declined didnt want the part
+                     partNr = client.TakeUlQue();
+                     break;
                  case 'c'://confirms i want the part
                      partNr = client.TakeUlQue();
                      if(partNr==-1)

@@ -126,19 +126,12 @@ class ClientDownloadHandler implements Runnable{
                         return;
                     }
                     if(broadcast.parts.allParts.contains(partN)){
-                        
-                            client.PutUlQue('c');
-                            client.PutUlQue(partN);
+                            client.PutUlQue('c', partN);
                             System.out.println("Dont have that part accepted");
-
-                        
                     }
                     else{
-                        
-                            client.PutUlQue('d');
-                            client.PutUlQue(partN); 
+                            client.PutUlQue('d',partN);
                             System.out.println("Have that part declined");
-                        
                     }
                     break;
                 case 'd'://the client didnt want the part
@@ -161,9 +154,8 @@ class ClientDownloadHandler implements Runnable{
                     }
                     if(partN==-1)
                         break;
-                    
-                        client.PutUlQue('p');
-                        client.PutUlQue(partN);
+                    client.PutUlQue('p',partN);
+                         
                     
                     break;
                 default:
