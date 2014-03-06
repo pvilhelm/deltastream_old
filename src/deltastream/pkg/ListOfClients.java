@@ -91,16 +91,33 @@ class ListOfClients{
         }
         
         boolean PutDlQue(int type){
-            return uploadQue.add(type);
+            try{
+                uploadQue.put(type);
+            }
+            catch(Exception ee){
+                System.out.println("couldnt put in que");
+            }
+            return true; //TODO error echeck
         }
         
         int GetDlQue(){
-            return downloadQue.poll();
+            try{
+                return downloadQue.take();
+            }
+            catch(Exception ee){
+                System.out.println("Coulnt get post from DL que");
+                return -1;//TODO check returning error
+            }
+             
         }
+        
+        /* IsUlQueFull(int n){//checks if u can add n posts 
+            return uploadQue.remainingCapacity()>=n;
+        }*/
         
         boolean PutUlQue(int type){
             try{
-                uploadQue.add(type);
+                uploadQue.put(type);
                 return true;
             }
             catch(Exception ee){
@@ -191,7 +208,10 @@ class ListOfClients{
                 myParts = Arrays.copyOfRange(myParts, -tmp_diff, myParts.length);
             }
             else if(tmp_diff>=0){
-                hisParts  = Arrays.copyOfRange(hisParts , tmp_diff, hisParts.length);
+                if(tmp_diff<=hisParts.length)
+                    hisParts  = Arrays.copyOfRange(hisParts , tmp_diff, hisParts.length);
+                else
+                    hisParts = new byte[0];
             }
             
             int tmp_diff2 = myParts.length - hisParts.length;

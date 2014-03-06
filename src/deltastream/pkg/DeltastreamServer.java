@@ -92,9 +92,9 @@ public class DeltastreamServer{
         Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
         thread.start();
          
-        client2.SendListOfParts('q');
+        /*client2.SendListOfParts('q');
         client2.GetListOfParts();
-        //broadcast.listOfClients.clientHashtable.get("94.254.41.219").CloseGenConnTCP();
+        //broadcast.listOfClients.clientHashtable.get("94.254.41.219").CloseGenConnTCP();*/
         
         UploadHandler uploadHandler = new UploadHandler(broadcast);
         Thread uploadHandlerThread = new Thread(uploadHandler,"Handle uploads");
