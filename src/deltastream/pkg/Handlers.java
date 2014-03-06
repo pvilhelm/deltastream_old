@@ -48,7 +48,8 @@ class UploadHandler implements Runnable{
             if(clientToUploadTo==null)
                 continue;
             if(clientToUploadTo.lastBitSet.getTime()+5000< new Date().getTime()){
-                clientToUploadTo.PutUlQue('q'); //TODO if it doenst put in queue, dont do rest!!!
+                if(!clientToUploadTo.uploadQue.contains('q'))
+                    clientToUploadTo.PutUlQue('q'); //TODO if it doenst put in queue, dont do rest!!!
                 if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){ //check if a upload thread is alive or make on
                     synchronized(clientToUploadTo){
                         if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
