@@ -118,6 +118,8 @@ class ClientDownloadHandler implements Runnable{
                     break;
                 case 'x'://do I want this part?
                     try{
+                        ISData.readLong();
+                        ISData.readByte();
                         partN = ISData.readInt(); /// <------------------ kom ihåg lägga in check här!!
                         System.out.println("Read part offer "+partN);
                     }
@@ -136,6 +138,8 @@ class ClientDownloadHandler implements Runnable{
                     break;
                 case 'd'://the client didnt want the part
                     try{
+                        ISData.readLong();
+                        ISData.readByte();
                         partN = ISData.readInt();
                         System.out.println("The client didnt want part "+partN);
                     }
@@ -146,6 +150,8 @@ class ClientDownloadHandler implements Runnable{
                 case 'c'://the client wants the part
                     partN = -1;
                     try{
+                        ISData.readLong();
+                        ISData.readByte();
                         partN = ISData.readInt();
                         System.out.println("The client want part "+partN);
                     }
