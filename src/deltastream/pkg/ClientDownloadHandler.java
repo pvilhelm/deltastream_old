@@ -82,7 +82,7 @@ class ClientDownloadHandler implements Runnable{
                             System.out.println("Couldnt read all bytes of part");//TODO error management
                         System.out.println("Acuired part "+partN);
                         Part part = new Part(partN, data); //TODO check signature
-                        broadcast.parts.PutPart(part);
+                        broadcast.parts.PutPart(part);//test
                     }
                     catch(Exception ee){
                         System.out.println("couldnt read part"+ee);
