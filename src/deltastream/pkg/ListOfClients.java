@@ -249,8 +249,7 @@ class ListOfClients{
             }
 
             BitSet digestBitSet = BitSet.valueOf(digest);
-            int randIndex = rand.nextInt(digestBitSet.size());
-            
+            int randIndex = rand.nextInt(digestBitSet.length());
             int bitIndex = digestBitSet.nextSetBit(randIndex);
             if(bitIndex==-1)
                 bitIndex = digestBitSet.previousSetBit(randIndex);

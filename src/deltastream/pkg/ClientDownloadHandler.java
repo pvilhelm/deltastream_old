@@ -120,14 +120,14 @@ class ClientDownloadHandler implements Runnable{
                     try{
                         ISData.readLong();
                         ISData.readByte();
-                        partN = ISData.readInt(); /// <------------------ kom ihåg lägga in check här!!
+                        partN = ISData.readInt(); /// TODO <------------------ kom ihåg lägga in check här!!
                         System.out.println("Read part offer "+partN);
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read what part client wants"+ee);
                         return;
                     }
-                    if(!broadcast.parts.allParts.contains(partN)){
+                    if(!broadcast.parts.allParts.contains(partN)){ //TODO or is downloading that part
                             client.PutUlQue('c', partN);
                             System.out.println("Dont have that part accepted");
                     }
