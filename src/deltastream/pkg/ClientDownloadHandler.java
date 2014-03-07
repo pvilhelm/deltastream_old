@@ -127,7 +127,7 @@ class ClientDownloadHandler implements Runnable{
                         System.out.println("Couldnt read what part client wants"+ee);
                         return;
                     }
-                    if(broadcast.parts.allParts.contains(partN)){
+                    if(!broadcast.parts.allParts.contains(partN)){
                             client.PutUlQue('c', partN);
                             System.out.println("Dont have that part accepted");
                     }
