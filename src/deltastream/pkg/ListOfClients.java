@@ -185,7 +185,9 @@ class ListOfClients{
                 outData.writeInt(PartN);
                 outData.flush();
                 System.out.println("Ask if he wants part "+PartN);
+                lastPartListRequested = new Date();
             }
+            
             catch(Exception ee){
                 System.out.println("Couldnt send send rq to client"+ee);                
             }
@@ -209,57 +211,39 @@ class ListOfClients{
                 System.out.println("MyBitset empty");
                 return -1;
             }
-            
-            byte[] myParts = myPartsBitSet.toByteArray();
-            byte[] hisParts = bitFieldParts.toByteArray();
-            
-            if(myNewestPartId<partIdOffset)//my newest part is older then the oldest part he
-                return -1;
-            //fuck java and its unsigned number madness  
-            
-            int tmp_diff = myOldestPartId - partIdOffset;
-            byte[]digest;
-            if(tmp_diff<0){//my oldest are older then the first he wants
-                myParts = Arrays.copyOfRange(myParts, -tmp_diff, myParts.length);
-            }
-            else if(tmp_diff>=0){
-                if(tmp_diff<=hisParts.length)
-                    hisParts  = Arrays.copyOfRange(hisParts , tmp_diff, hisParts.length);
-                else
-                    hisParts = new byte[0];
-            }
-            if(myParts.length<1)//i dont have any good parts
-                return -1;
-            
-            int tmp_diff2 = myParts.length - hisParts.length;
-            digest = new byte[myParts.length];
-            if(tmp_diff2>0){                 
-                for(int i=0;i<hisParts.length;i++){
-                    byte tmp = (byte) (myParts[i] ^ hisParts[i]); //the parts either of us have
-                    digest[i]= (byte)(tmp & myParts[i]);    //the parts either of us have that i have
-                }
-                System.arraycopy(myParts, hisParts.length, digest, hisParts.length, myParts.length-hisParts.length);
+            int diff;
+            synchronized(bitFieldParts){
+                diff = myOldestPartId-partIdOffset;
+                if(myNewestPartId<partIdOffset)
+                    return -1;//i have no parts that he would want
 
-            }
-            else if(tmp_diff2<0){//myparts is shorter then his parts
-                for(int i=0;i<myParts.length;i++){
-                    byte tmp = (byte) (myParts[i] ^ hisParts[i]); //the parts either of us have
-                    digest[i]= (byte)(tmp & myParts[i]);    //the parts either of us have that i have
+                BitSet answer = new BitSet();
+                if(diff>=0){
+                    for(int i=0;i<bitFieldParts.length()-diff;i++){
+                        if(!((myPartsBitSet.get(i) ^ bitFieldParts.get(i+diff)) & myPartsBitSet.get(i)))
+                            myPartsBitSet.clear(i); 
+                    } 
+
+                }
+                else{
+                   myPartsBitSet.clear(0, diff);
+
+                   for(int i=0;i<myPartsBitSet.length()-diff;i++){
+                        if(!((myPartsBitSet.get(i+diff) ^ bitFieldParts.get(i)) & myPartsBitSet.get(i+diff)))
+                            myPartsBitSet.clear(i+diff);  
+                    }    
                 }
             }
-
-            BitSet digestBitSet = BitSet.valueOf(digest);
-            int randIndex = rand.nextInt(digestBitSet.length());
-            int bitIndex = digestBitSet.nextSetBit(randIndex);
-            if(bitIndex==-1)
-                bitIndex = digestBitSet.previousSetBit(randIndex);
-            if(bitIndex==-1)
-                return -1;
+            int offset=0;
+            if(diff<0)
+                offset = diff;
             
-            if(tmp_diff<0)
-                return bitIndex+myOldestPartId+tmp_diff;
-            else
-                return bitIndex+myOldestPartId;
+            int indexRand = rand.nextInt(myNewestPartId-myOldestPartId-offset)+offset;
+            
+            int partNrRnd = myPartsBitSet.previousSetBit(indexRand);
+            if(partNrRnd==-1)
+                partNrRnd = myPartsBitSet.nextSetBit(indexRand);
+            return partNrRnd;
         }
         
         void UpdateLastContact(){
