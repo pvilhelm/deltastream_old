@@ -30,7 +30,7 @@ class UploadHandler implements Runnable{
     //this one uses port 82 (another port) then the client handlar
         for(;;){   
             try{
-                Thread.sleep(60); //varför protesterar den ...
+                Thread.sleep(5); //varför protesterar den ...
             }
             catch(Exception ee){
                 System.out.println("Couldnt sleep in uploadhandler");

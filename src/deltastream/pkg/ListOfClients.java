@@ -369,7 +369,9 @@ class ListOfClients{
                 System.out.println("Coulnt read length of array of bits of parts, connection error: "+ee);
             }
             try{
+                
                 lengthData = ISData.readShort();
+                
             }
             catch(Exception ee){
                 System.out.println("Coulnt read length of array of bits of parts, connection error: "+ee);
@@ -382,7 +384,8 @@ class ListOfClients{
             
             int readBytes = 0;
             try{
-                readBytes = this.IS.read(arrByteBitParts);
+                while(readBytes<lengthData){
+                readBytes += IS.read(arrByteBitParts,readBytes,lengthData-readBytes);}
                 if(readBytes!=lengthData)
                     throw new IOException();
             }
