@@ -297,7 +297,7 @@ class ListOfClients{
                 System.out.println("Sent key");
             }
             catch(Exception ee){
-                System.out.println("Couldnt send public key: "+ee);
+                System.out.println("Couldnt send public key: "+ee);//
             }
             UpdateLastContact();
         }
