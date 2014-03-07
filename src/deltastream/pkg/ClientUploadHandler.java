@@ -64,6 +64,8 @@ public class ClientUploadHandler implements Runnable{
                      break;
                  case 'x'://x = ask wether the client want a certein part
                      partNr = client.TakeUlQue();
+                     if(partNr==-1)
+                         break;//TODO some errror managment
                      client.AskSendPart(partNr);
                      break;
                  case 'q'://q = ask which parts a node has
@@ -98,8 +100,7 @@ public class ClientUploadHandler implements Runnable{
                      partNr = client.TakeUlQue();
                      if(partNr==-1)
                          break; //TODO some error managment
-                     Part part = broadcast.parts.allParts.get(partNr);
-                     client.SendPart(part);
+                     client.SendPart(partNr);
                      break;
                  default:
                      System.out.println("Wrong type in ClientUploadHandler"+typeToSend);

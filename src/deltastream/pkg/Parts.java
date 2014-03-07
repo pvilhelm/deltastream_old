@@ -77,7 +77,9 @@ class Parts{
          nOfParts++;
          System.out.println("Saved part"+part.partN);
          if(nOfParts>maxNOfParts){ //if too many parts
-             allParts.remove(oldestPartId); //remove one
+             synchronized(allParts.get(oldestPartId)){
+                allParts.remove(oldestPartId); //remove one
+             }
              oldestPartId++;    //new oldest part
              nOfParts--;        //remove one from count
          }      
@@ -88,7 +90,9 @@ class Parts{
         Part part = new Part(newestPartId++,data);  //
         allParts.put(part.partN, part);             //put the part in the mapping table
         if(++nOfParts>maxNOfParts)                  //remove the oldest part if buffer is full
-            allParts.remove(oldestPartId++);
+            synchronized(allParts.get(oldestPartId)){
+                allParts.remove(oldestPartId++);
+            }
           
     }    
     

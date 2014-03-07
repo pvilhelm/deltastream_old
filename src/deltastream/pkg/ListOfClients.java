@@ -245,56 +245,59 @@ class ListOfClients{
                     digest[i]= (byte)(tmp & myParts[i]);    //the parts either of us have that i have
                 }
             }
-            int randIndex = rand.nextInt(digest.length);
+
+            BitSet digestBitSet = BitSet.valueOf(digest);
+            int randIndex = rand.nextInt(digestBitSet.size());
+            
+            int bitIndex = digestBitSet.nextSetBit(randIndex);
+            if(bitIndex==-1)
+                bitIndex = digestBitSet.previousSetBit(randIndex);
+            if(bitIndex==-1)
+                return -1;
+            
             if(tmp_diff<0)
-                return randIndex+tmp_diff;
+                return bitIndex+myOldestPartId+tmp_diff;
             else
-                return randIndex;
+                return bitIndex+myOldestPartId;
         }
         
         void UpdateLastContact(){
             lastContact = new Date(); 
         }
         
-        void SendPart(){
+        void SendPart(int partNr){
             //send part to client
             DataOutputStream outData = new DataOutputStream(OS);
+             
+            Part partUl = broadcast.parts.allParts.get(partNr);
+            if(partUl==null){
+                System.out.println("Part doesnt exist");
+            }
+            int partN; long timeCreated;
+            byte[] dataCopy;
+            
+            synchronized(partUl){//reads the data so it wont block remove
+                partN = partUl.partN;
+                dataCopy = Arrays.copyOf(partUl.data, partUl.data.length);
+                timeCreated = partUl.timeCreated;
+            }
+            
             try{
                 outData.writeLong(broadcast.broadcastId);
                 outData.writeByte('p');
-                outData.writeInt(partToUpload.partN);
-                outData.writeLong(partToUpload.timeCreated);
+                outData.writeInt(partN);
+                outData.writeLong(timeCreated);
                 outData.writeLong(0);
-                outData.writeShort(partToUpload.data.length);
+                outData.writeShort(dataCopy.length);
                 //sign here
-                OS2.write(partToUpload.data);
+                OS2.write(dataCopy);
                 outData.flush();
-                System.out.println("Sent part: " + partToUpload.partN);
+                System.out.println("Sent part: " + partN);
             }
             catch(Exception ee){
                 System.out.println("Couldnt send part"+ee);
             }
-        }
-
-        void SendPart(Part part){
-            //send part to client
-            DataOutputStream outData = new DataOutputStream(OS);
-            try{
-                outData.writeLong(broadcast.broadcastId);
-                outData.writeByte('p');
-                outData.writeInt(part.partN);
-                outData.writeLong(part.timeCreated);
-                outData.writeLong(0);
-                outData.writeShort(part.data.length);
-                //sign here
-                OS2.write(part.data);
-                outData.flush();
-                System.out.println("Sent part: " + part.partN);
-            }
-            catch(Exception ee){
-                System.out.println("couldnt send part"+ee);
-            }
-        }   
+        } 
 
         synchronized void SendKey(){
             DataOutputStream OSData = new DataOutputStream(OS);
