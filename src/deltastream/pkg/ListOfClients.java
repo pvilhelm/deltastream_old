@@ -177,10 +177,7 @@ class ListOfClients{
         }
         
         void AskSendPart(int PartN){
-            //check if the client wants the part
-            Socket clientSocket;
-            boolean answer;
-                        
+            //check if the client wants the part        
             DataOutputStream outData = new DataOutputStream(OS);
             try{
                 outData.writeLong(broadcast.broadcastId); //writes broadcast ID

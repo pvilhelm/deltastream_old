@@ -63,6 +63,8 @@ public class ClientUploadHandler implements Runnable{
                      client.SendKey();
                      break;
                  case 'x'://x = ask wether the client want a certein part
+                     partNr = client.TakeUlQue();
+                     client.AskSendPart(partNr);
                      break;
                  case 'q'://q = ask which parts a node has
                      client.SendListOfParts('q');
