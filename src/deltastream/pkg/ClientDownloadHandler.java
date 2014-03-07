@@ -161,8 +161,6 @@ class ClientDownloadHandler implements Runnable{
                     if(partN==-1)
                         break;
                     client.PutUlQue('p',partN);
-                         
-                    
                     break;
                 default:
                     System.out.println("Error: Message wrong format, no type");
