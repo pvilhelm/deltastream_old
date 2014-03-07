@@ -85,7 +85,7 @@ class ClientDownloadHandler implements Runnable{
                         broadcast.parts.PutPart(part);
                     }
                     catch(Exception ee){
-                        System.out.println("couldnt send part"+ee);
+                        System.out.println("couldnt read part"+ee);
                     }
                     break;
                 case 'q': // q = ask which parts a node has
