@@ -86,11 +86,11 @@ class Parts{
             }
         }
         catch(Exception ee){
-                System.out.println("Error in putpart "+ee)
+                System.out.println("Error in putpart "+ee);
         }
               
-         }      
-    }
+    }      
+    
     
     synchronized void Put(byte data[]){
         //put part in the oldest part's place
