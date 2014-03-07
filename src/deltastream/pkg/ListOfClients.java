@@ -228,6 +228,8 @@ class ListOfClients{
                 else
                     hisParts = new byte[0];
             }
+            if(myParts.length<1)//i dont have any good parts
+                return -1;
             
             int tmp_diff2 = myParts.length - hisParts.length;
             digest = new byte[myParts.length];
@@ -271,7 +273,8 @@ class ListOfClients{
              
             Part partUl = broadcast.parts.allParts.get(partNr);
             if(partUl==null){
-                System.out.println("Part doesnt exist");
+                System.out.println("Part doesnt exist:" +partNr);
+                return;
             }
             int partN; long timeCreated;
             byte[] dataCopy;
@@ -287,10 +290,10 @@ class ListOfClients{
                 outData.writeByte('p');
                 outData.writeInt(partN);
                 outData.writeLong(timeCreated);
-                outData.writeLong(0);
+                //outData.writeLong(0);
                 outData.writeShort(dataCopy.length);
                 //sign here
-                OS2.write(dataCopy);
+                OS.write(dataCopy);
                 outData.flush();
                 System.out.println("Sent part: " + partN);
             }
