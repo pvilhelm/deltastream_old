@@ -8,7 +8,7 @@ package deltastream.pkg;
 import java.util.*;
 import java.util.BitSet;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.*;
 
 /**
  *
@@ -78,12 +78,13 @@ class Parts{
             nOfParts++;
             System.out.println("Saved part"+part.partN);
             if(nOfParts>maxNOfParts){ //if too many parts
-                allParts.remove(oldestPartId); //remove one TODO sync so only one oldest path etc 
+                while(allParts.remove(oldestPartId++)==null)
+                    ; //remove one TODO sync so only one oldest path etc 
                 //oldestPartId++;    //new oldest part
-                nOfParts--;        //remove one from count
-                Enumeration<Integer> keys = allParts.keys();
-                oldestPartId = keys.nextElement();
+                nOfParts--;        //remove one from count  
             }
+            
+            
         }
         catch(Exception ee){
                 System.out.println("Error in putpart "+ee);
