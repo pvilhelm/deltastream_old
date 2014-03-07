@@ -64,24 +64,31 @@ class Parts{
     
     synchronized void PutPart(Part part){
         //put a specific part in the allParts
-         if(part.partN<oldestPartId){//check wether the acuired part is too old
-             System.out.println("Part to old");
-             return;}
-         
-        //remeber to add check for timelimit here!!
-         if(allParts.containsKey(part.partN)){
-             System.out.println("Has that part");
-             return;}
-         
-         allParts.put(part.partN, part);
-         nOfParts++;
-         System.out.println("Saved part"+part.partN);
-         if(nOfParts>maxNOfParts){ //if too many parts
-             synchronized(allParts.get(oldestPartId)){
-                allParts.remove(oldestPartId); //remove one
-             }
-             oldestPartId++;    //new oldest part
-             nOfParts--;        //remove one from count
+        try{
+            if(part.partN<oldestPartId){//check wether the acuired part is too old
+                System.out.println("Part to old");
+                return;}
+
+           //remeber to add check for timelimit here!!
+            if(allParts.containsKey(part.partN)){
+                System.out.println("Has that part");
+                return;}
+
+            allParts.put(part.partN, part);
+            nOfParts++;
+            System.out.println("Saved part"+part.partN);
+            if(nOfParts>maxNOfParts){ //if too many parts
+                allParts.remove(oldestPartId); //remove one TODO sync so only one oldest path etc 
+                //oldestPartId++;    //new oldest part
+                nOfParts--;        //remove one from count
+                Enumeration<Integer> keys = allParts.keys();
+                oldestPartId = keys.nextElement();
+            }
+        }
+        catch(Exception ee){
+                System.out.println("Error in putpart "+ee)
+        }
+              
          }      
     }
     
