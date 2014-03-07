@@ -64,7 +64,7 @@ class Parts{
     
     synchronized void PutPart(Part part){
         //put a specific part in the allParts
-         if(part.partN<=oldestPartId){//check wether the acuired part is too old
+         if(part.partN<oldestPartId){//check wether the acuired part is too old
              System.out.println("Part to old");
              return;}
          

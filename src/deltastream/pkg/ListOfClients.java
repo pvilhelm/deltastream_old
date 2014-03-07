@@ -217,7 +217,7 @@ class ListOfClients{
                 if(myNewestPartId<partIdOffset)
                     return -1;//i have no parts that he would want
 
-                BitSet answer = new BitSet();
+                
                 if(diff>=0){
                     for(int i=0;i<bitFieldParts.length()-diff;i++){
                         if(!((myPartsBitSet.get(i) ^ bitFieldParts.get(i+diff)) & myPartsBitSet.get(i)))
@@ -243,7 +243,7 @@ class ListOfClients{
             int partNrRnd = myPartsBitSet.previousSetBit(indexRand);
             if(partNrRnd==-1)
                 partNrRnd = myPartsBitSet.nextSetBit(indexRand);
-            return partNrRnd;
+            return partNrRnd+myOldestPartId;
         }
         
         void UpdateLastContact(){
