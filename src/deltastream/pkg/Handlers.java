@@ -60,6 +60,7 @@ class UploadHandler implements Runnable{
                     synchronized(clientToUploadTo){
                         if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
                             Thread thread = new Thread(new ConnectToClient(clientToUploadTo,broadcast),"Make connection thread");
+                            clientToUploadTo.connected = true;
                             thread.start();
                         }
                     }

@@ -75,7 +75,7 @@ class ListOfClients{
         int clientSessionId;
         Thread ulThread;
         Thread dlThread;
-        Boolean connected; 
+        Boolean connected = true; 
         
         Client(Broadcast broadcast){
             lastContact = new Date(0); //when the client connected

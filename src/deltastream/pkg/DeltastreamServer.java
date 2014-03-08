@@ -135,6 +135,7 @@ public class DeltastreamServer{
                         Thread ulThread = new Thread( new ClientUploadHandler(client, broadcast), "Handle Client Upload ID="+client.clientSessionId);
                         client.dlThread = dlThread;
                         client.ulThread = ulThread;
+                        client.connected = true;
                         dlThread.start();
                         ulThread.start();
                     }
