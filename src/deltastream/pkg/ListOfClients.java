@@ -75,6 +75,7 @@ class ListOfClients{
         int clientSessionId;
         Thread ulThread;
         Thread dlThread;
+        Boolean connected; 
         
         Client(Broadcast broadcast){
             lastContact = new Date(0); //when the client connected
@@ -158,7 +159,8 @@ class ListOfClients{
                 System.out.println("confirmed part rq");
             }
             catch(Exception ee){
-                System.out.println("Couldnt send send rq to client"+ee);                
+                System.out.println("Couldnt send send rq to client"+ee);   
+                this.Drop();
             }  
         }
         
@@ -172,7 +174,8 @@ class ListOfClients{
                 System.out.println("Declined part rq");
             }
             catch(Exception ee){
-                System.out.println("Couldnt send decline rq to client"+ee);                
+                System.out.println("Couldnt send decline rq to client"+ee);    
+                this.Drop();
             }     
         }
         
@@ -184,12 +187,13 @@ class ListOfClients{
                 outData.writeByte('x');//type of message
                 outData.writeInt(PartN);
                 outData.flush();
-                System.out.println("Ask if he wants part "+PartN);
+                System.out.println("Ask if he wants part: "+PartN);
                 lastPartListRequested = new Date();
             }
             
             catch(Exception ee){
-                System.out.println("Couldnt send send rq to client"+ee);                
+                System.out.println("Couldnt send send rq to client"+ee);
+                this.Drop();
             }
         }
         
@@ -282,7 +286,11 @@ class ListOfClients{
             }
             catch(Exception ee){
                 System.out.println("Couldnt send part"+ee);
+                //Close connection to client
+                this.Drop();
             }
+            this.uploadedParts++;
+             
         } 
 
         synchronized void SendKey(){
@@ -298,6 +306,7 @@ class ListOfClients{
             }
             catch(Exception ee){
                 System.out.println("Couldnt send public key: "+ee);//
+                this.Drop();
             }
             UpdateLastContact();
         }
@@ -326,6 +335,8 @@ class ListOfClients{
             }
             catch(Exception ee){
                 System.out.println("coulndt provide answer to client about existing parts: "+ee);
+                this.Drop();
+                return;
             }
             UpdateLastContact();
         }
@@ -355,7 +366,7 @@ class ListOfClients{
      
         
         void GetListOfParts(){
-            //the client ask the servers which part it has
+            //read incoming data save as parts for this client
             short lengthData = 0;
 
 
@@ -367,6 +378,8 @@ class ListOfClients{
             }
             catch(Exception ee){
                 System.out.println("Coulnt read length of array of bits of parts, connection error: "+ee);
+                this.Drop();
+                return;
             }
             try{
                 
@@ -375,6 +388,8 @@ class ListOfClients{
             }
             catch(Exception ee){
                 System.out.println("Coulnt read length of array of bits of parts, connection error: "+ee);
+                this.Drop();
+                return;
             }
 
             if(lengthData<0)
@@ -391,6 +406,7 @@ class ListOfClients{
             }
             catch(Exception ee){
                 System.out.println("Couldnt read all the reqeusted parts"+ee+"Lengthdata:"+lengthData+" Readbytes: "+readBytes);
+                this.Drop();
                 return;
             }
             bitFieldParts = BitSet.valueOf(arrByteBitParts);
@@ -400,14 +416,17 @@ class ListOfClients{
              
         }
         void Drop(){
-            //drop the client from the list
+            //drop the client connection
             try{
-                OS.close();
+                socket.close();
+                connected = false; 
+                System.out.println("Error: Closed connection with client with IP: "+this.IP);
             }
             catch(Exception ee){
                 System.out.println("Problem closing socket for client");
             }
-            broadcast.listOfClients.clientHashtable.remove(IP);
+            
+            //broadcast.listOfClients.clientHashtable.remove(IP);
         }
     }
 }

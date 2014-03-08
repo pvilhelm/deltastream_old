@@ -88,7 +88,7 @@ public class DeltastreamServer{
         }
         catch(Exception ee){}
         
-        ListOfClients.Client client2 = broadcast.listOfClients.AddClient("94.254.41.186");
+        ListOfClients.Client client2 = broadcast.listOfClients.AddClient("176.10.225.120");
         Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
         thread.start();
          

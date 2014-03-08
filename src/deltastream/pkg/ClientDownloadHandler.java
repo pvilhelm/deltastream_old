@@ -50,7 +50,7 @@ class ClientDownloadHandler implements Runnable{
         int partN;
         byte [] data;
         
-        for(;;){
+        while(client.connected){
          
             try{
                 ISData.mark(100);
@@ -84,7 +84,8 @@ class ClientDownloadHandler implements Runnable{
                             System.out.println("Couldnt read all bytes of part");//TODO error management
                         System.out.println("Acuired part "+partN);
                         Part part = new Part(partN, data); //TODO check signature
-                        broadcast.parts.PutPart(part);//test
+                        broadcast.parts.PutPart(part);
+                        client.downloadedParts++;
                     }
                     catch(Exception ee){
                         System.out.println("couldnt read part"+ee);
@@ -143,7 +144,7 @@ class ClientDownloadHandler implements Runnable{
                         ISData.readLong();
                         ISData.readByte();
                         partN = ISData.readInt();
-                        System.out.println("The client didnt want part "+partN);
+                        System.out.println("The client didnt want part: "+partN);
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read part id");
@@ -155,7 +156,7 @@ class ClientDownloadHandler implements Runnable{
                         ISData.readLong();
                         ISData.readByte();
                         partN = ISData.readInt();
-                        System.out.println("The client want part "+partN);
+                        System.out.println("The client wants part: "+partN);
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read part id");

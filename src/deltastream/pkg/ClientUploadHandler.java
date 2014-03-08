@@ -47,7 +47,7 @@ public class ClientUploadHandler implements Runnable{
         }
         
         int partNr;
-        for(;;){
+        while(client.connected){
              
              //w8 for upload job
              byte typeToSend = (byte) client.TakeUlQue();
@@ -104,6 +104,7 @@ public class ClientUploadHandler implements Runnable{
                      break;
                  default:
                      System.out.println("Wrong type in ClientUploadHandler"+typeToSend);
+                     client.Drop();
                      break;
                      
              }
