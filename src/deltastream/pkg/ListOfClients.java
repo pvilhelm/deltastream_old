@@ -76,6 +76,7 @@ class ListOfClients{
         Thread ulThread;
         Thread dlThread;
         Boolean connected = true; 
+        int unsucessfullRcAttempts = 0;
         
         Client(Broadcast broadcast){
             lastContact = new Date(0); //when the client connected
@@ -89,6 +90,7 @@ class ListOfClients{
             uploadQue = new LinkedBlockingQueue(100);
             lastBitSet = new Date(0);
             clientSessionId = rand.nextInt();
+            
         }
         
         synchronized boolean PutDlQue(int type){
