@@ -51,23 +51,23 @@ public class OutputStreamServer implements Runnable{
             for(;;){//TODO add support for moar outputs and not only to 127.0.0.1
                 
                 if(partToGet != broadcast.parts.oldestPartId+10){
-                    if(partToGet+1 != broadcast.parts.oldestPartId+10)
-                        break;
-                    errorN = new Date();
-                    partToGet = broadcast.parts.oldestPartId+10;
-                    Part part = broadcast.parts.allParts.get(partToGet);
-                    try{
-                        dataOutputStream.write(part.data);
-                        dataOutputStream.flush();
+                    if(partToGet+1 == broadcast.parts.oldestPartId+10){                                        
+                        errorN = new Date();
+                        partToGet = broadcast.parts.oldestPartId+10;
+                        Part part = broadcast.parts.allParts.get(partToGet);
+                        try{
+                            dataOutputStream.write(part.data);
+                            dataOutputStream.flush();
 
-                    }
-                    catch(Exception ee){
-                        System.out.println("Couldnt write to output. ");
-                        break;
-                        
+                        }
+                        catch(Exception ee){
+                            System.out.println("Couldnt write to output. ");
+                            break;
+
+                        }
                     }
                 }
-                else if(errorN.getTime()+5000<(new Date()).getTime()){
+                if(errorN.getTime()+5000<(new Date()).getTime()){
                     errorN = new Date();
                     partToGet = broadcast.parts.oldestPartId+10;//nollställer
                     System.out.println("Resetting output stream part number to:"+partToGet);
