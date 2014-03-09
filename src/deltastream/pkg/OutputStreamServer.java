@@ -55,8 +55,8 @@ public class OutputStreamServer implements Runnable{
                         
                         Part part = broadcast.parts.allParts.get(partToGet);
                         try{
-                            //dataOutputStream.write(part.data);
-                            dataOutputStream.writeChars("part nr:"+part.partN+"\r\n");
+                            dataOutputStream.write(part.data);
+                            //dataOutputStream.writeChars("part nr:"+part.partN+"\r\n");
                             dataOutputStream.flush();
 
                         }
