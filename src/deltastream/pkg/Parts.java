@@ -71,7 +71,7 @@ class Parts{
 
            //remeber to add check for timelimit here!!
             if(allParts.containsKey(part.partN)){
-                System.out.println("Has that part");
+                //System.out.println("Has that part");
                 return;}
 
             allParts.put(part.partN, part);
