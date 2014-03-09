@@ -16,8 +16,9 @@ public class OutputStreamServer implements Runnable{
     ServerSocket serverSocket;
     
     OutputStreamServer(Broadcast thisBroadcast){
+        
+        broadcast = thisBroadcast;     
         parts = broadcast.parts; 
-        broadcast = thisBroadcast;      
     }
     
     @Override
