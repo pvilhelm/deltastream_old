@@ -425,6 +425,10 @@ class ListOfClients{
                 System.out.println("Error: Closed connection with client with IP: "+this.IP);
                 this.uploadQue.clear();
                 this.downloadQue.clear();
+                this.socket = null;
+                this.OS = null;
+                this.IS = null;
+                 
                 
             }
             catch(Exception ee){
