@@ -34,9 +34,9 @@ public class DeltastreamClient {
         }
         
         //init upload handler
-        UploadHandler uploadHandler = new UploadHandler(broadcast);
+        /*UploadHandler uploadHandler = new UploadHandler(broadcast);
         Thread uploadHandlerThread = new Thread(uploadHandler,"Upload Handler");
-        uploadHandlerThread.start();
+        uploadHandlerThread.start();*/
         
         /*OutputStreamServer outputStreamServer = new OutputStreamServer(broadcast);
         Thread outputStreamServerThread = new Thread(outputStreamServer,"OutputStreamServer");
@@ -66,9 +66,9 @@ public class DeltastreamClient {
                 else{
                     client = broadcast.listOfClients.clientHashtable.get(clientIp);
                 }
-            }
-            client.socket = clientSocket; 
             
+            client.socket = clientSocket; 
+            }
             //creates thread for handling the client
             if(client.ulThread==null || !client.ulThread.isAlive()){
                 synchronized(client){
