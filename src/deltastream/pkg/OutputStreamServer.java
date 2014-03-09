@@ -37,6 +37,8 @@ public class OutputStreamServer implements Runnable{
             try{
                 outputSocket = serverSocket.accept();
                 dataOutputStream = new DataOutputStream(outputSocket.getOutputStream());
+                System.out.println("Connection on Outputstream from:"+outputSocket.toString());
+                dataOutputStream.writeUTF("Connected to Outputstream: Test");//TEST remeber to remove TODO TODO TODO
             }
             catch(Exception ee){
                 System.out.println("Couldnt accept connection for output");
