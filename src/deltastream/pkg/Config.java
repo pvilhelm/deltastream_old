@@ -21,7 +21,7 @@ public class Config {
     public static int clientServerSocketPort = 82;   //the port for generic com with clients
     public static int clientDLUPServerSocketPort = 83;   //the port for generic com with clients
     public static int genericStreamBufferSize = 1000000; //the buffer size in bytes for some streams
-    
+    public static int clientOutputServerSocketPort = 84 ;
     Config(String[] args){
         //arguments go here
     }

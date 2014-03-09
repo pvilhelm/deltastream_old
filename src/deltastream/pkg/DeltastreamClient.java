@@ -38,6 +38,10 @@ public class DeltastreamClient {
         Thread uploadHandlerThread = new Thread(uploadHandler);
         uploadHandlerThread.start();
         
+        OutputStreamServer outputStreamServer = new OutputStreamServer(broadcast);
+        Thread outputStreamServerThread = new Thread(outputStreamServer);
+        outputStreamServerThread.start();
+        
         //w8 for new connections 
         for(;;){
             Socket clientSocket;

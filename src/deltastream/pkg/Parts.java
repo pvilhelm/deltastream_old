@@ -39,7 +39,7 @@ class Parts{
     }   
     synchronized BitSet GetPartsAsBitSet(){ //extremly ugly D:
         //TODO only do this when a part is updated ... get allOartsBitSet instead
-        BitSet bitSet = new BitSet(allParts.size());
+        BitSet bitSet = new BitSet(allParts.size());//borde ju va största id - minsta ...
         int i = 0;
         for(Map.Entry<Integer, Part> entry : allParts.entrySet()){
             int tmp = entry.getKey()-oldestPartId;

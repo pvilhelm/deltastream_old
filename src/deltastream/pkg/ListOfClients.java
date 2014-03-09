@@ -402,7 +402,7 @@ class ListOfClients{
             int readBytes = 0;
             try{
                 while(readBytes<lengthData){
-                readBytes += IS.read(arrByteBitParts,readBytes,lengthData-readBytes);}
+                    readBytes += IS.read(arrByteBitParts,readBytes,lengthData-readBytes);}
                 if(readBytes!=lengthData)
                     throw new IOException();
             }
