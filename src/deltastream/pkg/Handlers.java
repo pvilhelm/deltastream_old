@@ -167,6 +167,69 @@ class MakeParts extends TimerTask{
     }
 }
 
+class MakePartsUDP extends TimerTask{
+    Broadcast broadcast;
+    BufferedInputStream internalInputStream;
+    byte[] buffer;
+    
+    MakePartsUDP(BufferedInputStream internalInputStream, Broadcast broadcast, byte[] buffer){
+        this.broadcast = broadcast;
+        this.internalInputStream = internalInputStream;
+        this.buffer = buffer;
+        
+    }
+    
+    @Override
+    public void run(){
+        
+        DataInputStream dataIn = new DataInputStream(internalInputStream);
+        
+        int nrOfBytes;
+        try{
+            nrOfBytes = internalInputStream.available();
+        }
+        catch(Exception ee)
+        {
+            System.out.println("Coulnt read how many bytes avaible in make parts task");
+            return;
+        }
+        int readBytes = 0;
+        int datagramL;
+        try{
+            if(broadcast.oldDatagramLength!=0){
+                datagramL = broadcast.oldDatagramLength;
+                broadcast.oldDatagramLength = 0;
+                if(datagramL<=nrOfBytes)
+                        readBytes += internalInputStream.read(buffer, 0, nrOfBytes);
+
+                }
+
+            for(;readBytes+2<nrOfBytes;){
+                datagramL = dataIn.readShort();
+                readBytes+=2;
+                
+                if(readBytes+datagramL<=nrOfBytes)
+                    readBytes += internalInputStream.read(buffer, readBytes, nrOfBytes);
+                else{//not enough data in input stream
+                    broadcast.oldDatagramLength = datagramL;
+                    break;
+                }
+            }
+        }
+        catch(Exception ee){
+            System.out.println("Couldnt read buffer in making parts");
+        }
+        broadcast.parts.Put(Arrays.copyOfRange(buffer,0, nrOfBytes));
+        
+        /*try{
+            System.out.println(buffer[0] +" "+ nrOfBytes);
+        }
+        catch(Exception ee){
+            ;
+        }*/
+    }
+}
+
 class ReadInputStream implements Runnable{
     //här ska instreamen samplas ... 
     InputStream BufferedInDataStream;
@@ -227,6 +290,74 @@ class ReadInputStream implements Runnable{
             }
             catch(Exception ee){
                 System.out.println("Couldnt write to internal piped stream");
+            }
+            //saves the data in a part
+            
+
+            
+        }
+    }
+}
+
+class ReadInputStreamUDP implements Runnable{
+    //här ska instreamen samplas ... 
+    InputStream bufferedInDataStream;
+    Broadcast broadcast;
+    
+    ReadInputStreamUDP(InputStream bufferedInDataStream, Broadcast broadcast){
+        this.bufferedInDataStream = bufferedInDataStream;
+        this.broadcast = broadcast;
+    }
+    
+    @Override 
+    public void run(){
+        System.out.println("Creating part");
+        byte[] buffer = new byte[10000000];
+        byte[] buffer2 = new byte[10000000];
+        
+         
+        PipedOutputStream internalOutputStream;
+        PipedInputStream internalInputStream;
+        BufferedOutputStream internalOutputStreamBuffered;
+        BufferedInputStream internalInputStreamBuffered;
+        try{
+            internalOutputStream = new PipedOutputStream();
+            internalOutputStreamBuffered = new BufferedOutputStream(internalOutputStream,2000);
+            
+            internalInputStream = new PipedInputStream(internalOutputStream,10000000);
+            internalInputStreamBuffered = new BufferedInputStream(internalInputStream,1000000);    
+             
+        }
+        catch(Exception ee){
+            System.out.println("Couldnt connect piped streams");
+            return;
+        }
+
+        TimerTask makePartsUDP = new MakePartsUDP(internalInputStreamBuffered, broadcast, buffer2);
+        Timer SampleTimer = new Timer(); //sets timer
+        SampleTimer.schedule(makePartsUDP,broadcast.samplingPeriod,broadcast.samplingPeriod); //starts timer event
+        DataInputStream dataIn = new DataInputStream(bufferedInDataStream);
+        DataOutputStream dataOutInternal = new DataOutputStream(internalOutputStreamBuffered);
+        int datagramL;
+        
+        for(;;){
+             
+            try{
+                 
+                datagramL = dataIn.readShort();
+                bufferedInDataStream.read(buffer,0,datagramL);
+            }
+            catch(Exception ee){
+                System.out.println("Couln't read instreambuffer: "+ee);
+                return;
+            }
+            try{ 
+                dataOutInternal.writeShort(datagramL);
+                internalOutputStreamBuffered.write(buffer,0,datagramL);
+            }
+            catch(Exception ee){
+                System.out.println("Couldnt write to internal piped stream");
+                return;
             }
             //saves the data in a part
             

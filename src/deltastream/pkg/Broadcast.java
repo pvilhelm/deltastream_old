@@ -29,4 +29,5 @@ public class Broadcast{
     ServerSocket inputSSS; //inputStreamServerSocket
     int samplingPeriod;
     Config config;
+    int oldDatagramLength;//length of a datagram that wasnt included in a part
 }

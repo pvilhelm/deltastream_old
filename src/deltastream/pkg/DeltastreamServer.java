@@ -37,7 +37,7 @@ public class DeltastreamServer{
         
         Socket s;           //the stream connection
         InputStream InDataStream;   //the internal stream
-        InputStream BufferedInDataStream; //d:o buffered
+        InputStream bufferedInDataStream; //d:o buffered
         
         try{       
             s = broadcast.inputSSS.accept(); //accepts a connection on that socket
@@ -59,12 +59,16 @@ public class DeltastreamServer{
             return; 
             
         }
-        BufferedInDataStream = new BufferedInputStream(InDataStream);
-        
-        
-        //Sample the input stream every SamplingPeriod ms
+        bufferedInDataStream = new BufferedInputStream(InDataStream);
+        /*
         ReadInputStream readInputStream = new ReadInputStream(BufferedInDataStream, broadcast);
         Thread readInputStreamThread = new Thread(readInputStream);
+        readInputStreamThread.start();
+        */
+        
+        //Sample the input stream every SamplingPeriod ms
+        ReadInputStreamUDP readInputStreamUDP = new ReadInputStreamUDP(bufferedInDataStream, broadcast);
+        Thread readInputStreamThread = new Thread(readInputStreamUDP);
         readInputStreamThread.start();
         
         //Listen for clients
