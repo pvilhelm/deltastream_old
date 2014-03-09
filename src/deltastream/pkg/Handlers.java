@@ -113,7 +113,7 @@ class ConnectToClient implements Runnable{
                 }
             }
             client.lastTriedToConnetcTo =   new Date();
-           
+            client.connected = true;
             //creates thread for handling the client
             Thread dlThread = new Thread( new ClientDownloadHandler(client, broadcast), "Handle Client Download ID="+client.clientSessionId);
             Thread ulThread = new Thread( new ClientUploadHandler(client, broadcast), "Handle Client Upload ID="+client.clientSessionId);
