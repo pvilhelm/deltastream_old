@@ -306,68 +306,115 @@ class ReadInputStream implements Runnable{
 
 class ReadInputStreamUDP implements Runnable{
     //här ska instreamen samplas ... 
-    InputStream bufferedInDataStream;
+    
     Broadcast broadcast;
     
-    ReadInputStreamUDP(InputStream bufferedInDataStream, Broadcast broadcast){
-        this.bufferedInDataStream = bufferedInDataStream;
+    ReadInputStreamUDP(Broadcast broadcast){
+        
         this.broadcast = broadcast;
     }
     
     @Override 
     public void run(){
-        System.out.println("Creating part");
-        byte[] buffer = new byte[10000000];
-        byte[] buffer2 = new byte[10000000];
-        
-         
-        PipedOutputStream internalOutputStream;
-        PipedInputStream internalInputStream;
-        BufferedOutputStream internalOutputStreamBuffered;
-        BufferedInputStream internalInputStreamBuffered;
-        try{
-            internalOutputStream = new PipedOutputStream();
-            internalOutputStreamBuffered = new BufferedOutputStream(internalOutputStream,2000);
-            
-            internalInputStream = new PipedInputStream(internalOutputStream,10000000);
-            internalInputStreamBuffered = new BufferedInputStream(internalInputStream,1000000);    
-             
-        }
-        catch(Exception ee){
-            System.out.println("Couldnt connect piped streams");
-            return;
-        }
-
-        TimerTask makePartsUDP = new MakePartsUDP(internalInputStreamBuffered, broadcast, buffer2);
-        Timer SampleTimer = new Timer(); //sets timer
-        SampleTimer.schedule(makePartsUDP,broadcast.samplingPeriod,broadcast.samplingPeriod); //starts timer event
-        DataInputStream dataIn = new DataInputStream(bufferedInDataStream);
-        DataOutputStream dataOutInternal = new DataOutputStream(internalOutputStreamBuffered);
-        int datagramL;
-        
         for(;;){
-             
             try{
-                 
-                datagramL = dataIn.readShort();
-                bufferedInDataStream.read(buffer,0,datagramL);
+                broadcast.inputSSS = new ServerSocket(81); //creates a server socked that accepts i stream of some sort
+                broadcast.inputSSS.setReceiveBufferSize(10000);
             }
             catch(Exception ee){
-                System.out.println("Couln't read instreambuffer: "+ee);
-                return;
+                System.out.println("Couln't create Server Socket: " + ee);
+                return; 
             }
-            try{ 
-                dataOutInternal.writeShort(datagramL);
-                internalOutputStreamBuffered.write(buffer,0,datagramL);
-            }
-            catch(Exception ee){
-                System.out.println("Couldnt write to internal piped stream");
-                return;
-            }
-            //saves the data in a part
-            
 
+            Socket s;           //the stream connection
+            InputStream InDataStream;   //the internal stream
+            InputStream bufferedInDataStream; //d:o buffered
+
+            try{       
+                s = broadcast.inputSSS.accept(); //accepts a connection on that socket
+                s.setSendBufferSize(2000);
+                s.setReceiveBufferSize(1000000);
+                System.out.println("Stream source connected on port: " + s.getPort()+" from IP: "+s.getInetAddress());
+                s.setSoTimeout(0); ///<--remeber to remove
+            }
+            catch(Exception ee){
+                System.out.println("Couln't accept stream connection: " + ee);
+                return; 
+            }
+
+            try{
+                InDataStream = s.getInputStream();
+            }
+            catch(Exception ee){
+                System.out.println("Couln't get input stream from stream connection: " + ee);
+                return; 
+
+            }
+            bufferedInDataStream = new BufferedInputStream(InDataStream);
+
+
+            System.out.println("Creating part");
+            byte[] buffer = new byte[10000000];
+            byte[] buffer2 = new byte[10000000];
+
+
+            PipedOutputStream internalOutputStream;
+            PipedInputStream internalInputStream;
+            BufferedOutputStream internalOutputStreamBuffered;
+            BufferedInputStream internalInputStreamBuffered;
+            try{
+                internalOutputStream = new PipedOutputStream();
+                internalOutputStreamBuffered = new BufferedOutputStream(internalOutputStream,2000);
+
+                internalInputStream = new PipedInputStream(internalOutputStream,10000000);
+                internalInputStreamBuffered = new BufferedInputStream(internalInputStream,1000000);    
+
+            }
+            catch(Exception ee){
+                System.out.println("Couldnt connect piped streams");
+                break;
+            }
+
+            TimerTask makePartsUDP = new MakePartsUDP(internalInputStreamBuffered, broadcast, buffer2);
+            Timer SampleTimer = new Timer(); //sets timer
+            SampleTimer.schedule(makePartsUDP,broadcast.samplingPeriod,broadcast.samplingPeriod); //starts timer event
+            DataInputStream dataIn = new DataInputStream(bufferedInDataStream);
+            DataOutputStream dataOutInternal = new DataOutputStream(internalOutputStreamBuffered);
             
+            int datagramL;
+
+            for(;;){
+
+                try{
+
+                    datagramL = dataIn.readShort();
+                    bufferedInDataStream.read(buffer,0,datagramL);
+                }
+                catch(Exception ee){
+                    System.out.println("Couln't read instreambuffer: "+ee);
+                    break;
+                }
+                try{ 
+                    dataOutInternal.writeShort(datagramL);
+                    internalOutputStreamBuffered.write(buffer,0,datagramL);
+                }
+                catch(Exception ee){
+                    System.out.println("Couldnt write to internal piped stream");
+                    break;
+                }
+                //saves the data in a part
+
+
+
+            }
+            SampleTimer.cancel();
+            try{
+                broadcast.inputSSS.close();
+                s.close();
+            }
+            catch(Exception ee){
+                ;
+            }
         }
     }
 }

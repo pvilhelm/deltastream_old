@@ -24,42 +24,7 @@ public class DeltastreamServer{
         config = new Config(args);
         Broadcast broadcast = config.CreateBroadcast(); //creates a broadcast object from the config
         broadcast.config = config;
-        
-        
-        try{
-            broadcast.inputSSS = new ServerSocket(81); //creates a server socked that accepts i stream of some sort
-            broadcast.inputSSS.setReceiveBufferSize(10000);
-        }
-        catch(Exception ee){
-            System.out.println("Couln't create Server Socket: " + ee);
-            return; 
-        }
-        
-        Socket s;           //the stream connection
-        InputStream InDataStream;   //the internal stream
-        InputStream bufferedInDataStream; //d:o buffered
-        
-        try{       
-            s = broadcast.inputSSS.accept(); //accepts a connection on that socket
-            s.setSendBufferSize(2000);
-            s.setReceiveBufferSize(1000000);
-            System.out.println("Stream source connected on port: " + s.getPort()+" from IP: "+s.getInetAddress());
-            s.setSoTimeout(0); ///<--remeber to remove
-        }
-        catch(Exception ee){
-            System.out.println("Couln't accept stream connection: " + ee);
-            return; 
-        }
 
-        try{
-            InDataStream = s.getInputStream();
-        }
-        catch(Exception ee){
-            System.out.println("Couln't get input stream from stream connection: " + ee);
-            return; 
-            
-        }
-        bufferedInDataStream = new BufferedInputStream(InDataStream);
         /*
         ReadInputStream readInputStream = new ReadInputStream(BufferedInDataStream, broadcast);
         Thread readInputStreamThread = new Thread(readInputStream);
@@ -67,7 +32,7 @@ public class DeltastreamServer{
         */
         
         //Sample the input stream every SamplingPeriod ms
-        ReadInputStreamUDP readInputStreamUDP = new ReadInputStreamUDP(bufferedInDataStream, broadcast);
+        ReadInputStreamUDP readInputStreamUDP = new ReadInputStreamUDP(broadcast);
         Thread readInputStreamThread = new Thread(readInputStreamUDP, "Read input UDP");
         readInputStreamThread.start();
         
@@ -80,15 +45,10 @@ public class DeltastreamServer{
         catch(Exception ee){
             System.out.println("Couldn't set up Client Server Socket"+ee);
         }
-        
-        
-        
+
         //init upload handler
         //will upload to known clients at "random"==smart algortim
-        
 
-        
-        
         ListOfClients.Client client2 = broadcast.listOfClients.AddClient("81.170.216.105");
         Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
         thread.start();
@@ -97,10 +57,6 @@ public class DeltastreamServer{
             Thread.sleep(2000);
         }
         catch(Exception ee){}
-         
-        /*client2.SendListOfParts('q');
-        client2.GetListOfParts();
-        //broadcast.listOfClients.clientHashtable.get("94.254.41.219").CloseGenConnTCP();*/
         
         UploadHandler uploadHandler = new UploadHandler(broadcast);
         Thread uploadHandlerThread = new Thread(uploadHandler,"Handle uploads");
@@ -138,13 +94,6 @@ public class DeltastreamServer{
             if(client.ulThread==null || !client.ulThread.isAlive()){
                 synchronized(client){
                     if(client.ulThread==null || !client.ulThread.isAlive()){
-                        /*Thread dlThread = new Thread( new ClientDownloadHandler(client, broadcast), "Handle Client Download ID="+client.clientSessionId);
-                        Thread ulThread = new Thread( new ClientUploadHandler(client, broadcast), "Handle Client Upload ID="+client.clientSessionId);
-                        client.dlThread = dlThread;
-                        client.ulThread = ulThread;
-                        client.connected = true;
-                        dlThread.start();
-                        ulThread.start();*/
                         Thread thread2 = new Thread(new ConnectToClient(client,broadcast),"Make connection thread");
                         thread2.start();
                     }
