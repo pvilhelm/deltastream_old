@@ -52,7 +52,7 @@ class UploadHandler implements Runnable{
                     synchronized(clientToUploadTo){
                         if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
                             Thread thread = new Thread(new ConnectToClient(clientToUploadTo,broadcast),"Make connection thread");
-                            clientToUploadTo.connected = true;
+                            
                             thread.start();
                         }
                     }
@@ -110,6 +110,7 @@ class ConnectToClient implements Runnable{
                     System.out.println("Couldnt create streams in ConnectedToClient");
                     client.unsucessfullRcAttempts++;
                     //TODO add reomve client thingy here when to many failed rc attemps
+                    return;
                 }
             }
             client.lastTriedToConnetcTo =   new Date();
