@@ -50,7 +50,7 @@ public class OutputStreamServer implements Runnable{
             Date errorN = new Date();
             for(;;){//TODO add support for moar outputs and not only to 127.0.0.1
                 
-                if(partToGet <= broadcast.parts.oldestPartId+51){
+                if(partToGet <= broadcast.parts.oldestPartId+50){
                     if(broadcast.parts.allParts.containsKey(partToGet)){                                        
                         errorN = new Date();
                         
@@ -79,10 +79,7 @@ public class OutputStreamServer implements Runnable{
                     catch(Exception ee){
                         System.out.println("Coulnt write to terminal");    
                     }
-                }
-                //else{
-                //    try{Thread.sleep(50);}catch(Exception ee){System.out.println("Error nr 2qweqweqweqwe");}
-                //}               
+                }                            
             }
         }     
     }      

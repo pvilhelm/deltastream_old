@@ -47,15 +47,7 @@ class UploadHandler implements Runnable{
             if(clientToUploadTo==null)
                 continue;
             
-            
-            if(clientToUploadTo.uploadQue.size()>12) // TODO <------------- make this changeable from config
-                continue;
-
-            
-            long time = new Date().getTime();
-            if(clientToUploadTo.lastBitSet.getTime()+5000< time){
-                if(!clientToUploadTo.uploadQue.contains('q') && (clientToUploadTo.lastPartListRequested.getTime() + 2000 < time))
-                    clientToUploadTo.PutUlQue('q'); //TODO if it doenst put in queue, dont do rest!!!
+            if(!clientToUploadTo.connected && (clientToUploadTo.lastTriedToConnetcTo.getTime()+2000<(new Date()).getTime())){
                 if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){ //check if a upload thread is alive or make on
                     synchronized(clientToUploadTo){
                         if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
@@ -65,6 +57,17 @@ class UploadHandler implements Runnable{
                         }
                     }
                 }
+            }
+            
+            if(clientToUploadTo.uploadQue.size()>12) // TODO <------------- make this changeable from config
+                continue;
+
+            
+            long time = new Date().getTime();
+            if(clientToUploadTo.lastBitSet.getTime()+5000< time){
+                if(!clientToUploadTo.uploadQue.contains(113) && (clientToUploadTo.lastPartListRequested.getTime() + 2000 < time))
+                    clientToUploadTo.PutUlQue('q'); //TODO if it doenst put in queue, dont do rest!!!
+                
                 continue;
             }
             //pick random part it needs
@@ -76,15 +79,6 @@ class UploadHandler implements Runnable{
             
                 
             clientToUploadTo.PutUlQue('x',partToUploadNr); 
-            if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
-                synchronized(clientToUploadTo){
-                    if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){
-                        Thread thread = new Thread(new ConnectToClient(clientToUploadTo,broadcast),"Make connection thread");
-                        thread.start();
-                    }
-                }
-            } 
-            
         }
     }
 }   
@@ -104,20 +98,22 @@ class ConnectToClient implements Runnable{
     public void run(){
         
         synchronized(client){ //TODO should be "thread making lock" instead
-                if(client.socket == null || !client.socket.isConnected() || client.socket.isClosed()){
-                    try{
-                        Socket socket =  new Socket(client.IP,Config.clientServerSocketPort);
-                        client.socket = socket;
-                        client.OS = new BufferedOutputStream(socket.getOutputStream());
-                        client.IS = new BufferedInputStream(socket.getInputStream());
-                        client.socket.setSoTimeout(0);//TODO remeber to remove/set lower
-                    }
-                    catch(Exception ee){
-                        System.out.println("Couldnt create streams in ConnectedToClient");
-                    }
+            if(client.socket == null || !client.socket.isConnected() || client.socket.isClosed()){
+                try{
+                    Socket socket =  new Socket(client.IP,Config.clientServerSocketPort);
+                    client.socket = socket;
+                    client.OS = new BufferedOutputStream(socket.getOutputStream());
+                    client.IS = new BufferedInputStream(socket.getInputStream());
+                    client.socket.setSoTimeout(0);//TODO remeber to remove/set lower
                 }
-
-
+                catch(Exception ee){
+                    System.out.println("Couldnt create streams in ConnectedToClient");
+                    client.unsucessfullRcAttempts++;
+                    //TODO add reomve client thingy here when to many failed rc attemps
+                }
+            }
+            client.lastTriedToConnetcTo =   new Date();
+           
             //creates thread for handling the client
             Thread dlThread = new Thread( new ClientDownloadHandler(client, broadcast), "Handle Client Download ID="+client.clientSessionId);
             Thread ulThread = new Thread( new ClientUploadHandler(client, broadcast), "Handle Client Upload ID="+client.clientSessionId);

@@ -65,6 +65,7 @@ class ListOfClients{
         Date lastPartSentToClient;
         Date lastPartAquiredFromClient;
         Date lastKeyRqSentToClient;
+        Date lastTriedToConnetcTo;
         BitSet bitFieldParts;
         int partIdOffset;
         Broadcast broadcast; //the broadcast the client belongs to
@@ -83,6 +84,7 @@ class ListOfClients{
             firstContact = new Date(0);
             lastPartSentToClient = new Date(0);
             lastPartListRequested = new Date(0);
+            lastTriedToConnetcTo = new Date(0);
             this.broadcast = broadcast;
             bitFieldParts = new BitSet(100);
             lockUPDL = new Object();
