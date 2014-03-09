@@ -72,7 +72,7 @@ class ClientDownloadHandler implements Runnable{
                             nReadBytes += ISData.read(data,nReadBytes,dataLength-nReadBytes);        
                         if(nReadBytes!=dataLength)
                             System.out.println("Couldnt read all bytes of part");//TODO error management
-                        System.out.println("Acuired part "+partN);
+                        //System.out.println("Acuired part "+partN);
                         Part part = new Part(partN, data); //TODO check signature
                         broadcast.parts.PutPart(part);
                         client.downloadedParts++;
@@ -115,7 +115,7 @@ class ClientDownloadHandler implements Runnable{
                         ISData.readLong();
                         ISData.readByte();
                         partN = ISData.readInt(); /// TODO <------------------ kom ihåg lägga in check här!!
-                        System.out.println("Read part offer "+partN);
+                        //System.out.println("Read part offer "+partN);
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read what part client wants"+ee);
@@ -124,11 +124,11 @@ class ClientDownloadHandler implements Runnable{
                     }
                     if(!broadcast.parts.allParts.contains(partN)){ //TODO or is downloading that part
                             client.PutUlQue('c', partN);
-                            System.out.println("Dont have that part accepted");
+                            //System.out.println("Dont have that part accepted");
                     }
                     else{
                             client.PutUlQue('d',partN);
-                            System.out.println("Have that part declined");
+                            //System.out.println("Have that part declined");
                     }
                     break;
                 case 'd'://the client didnt want the part
@@ -136,7 +136,7 @@ class ClientDownloadHandler implements Runnable{
                         ISData.readLong();
                         ISData.readByte();
                         partN = ISData.readInt();
-                        System.out.println("The client didnt want part: "+partN);
+                        //System.out.println("The client didnt want part: "+partN);
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read part id");
@@ -149,7 +149,7 @@ class ClientDownloadHandler implements Runnable{
                         ISData.readLong();
                         ISData.readByte();
                         partN = ISData.readInt();
-                        System.out.println("The client wants part: "+partN);
+                        //System.out.println("The client wants part: "+partN);
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read part id");
