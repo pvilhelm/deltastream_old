@@ -68,7 +68,7 @@ public class DeltastreamServer{
         
         //Sample the input stream every SamplingPeriod ms
         ReadInputStreamUDP readInputStreamUDP = new ReadInputStreamUDP(bufferedInDataStream, broadcast);
-        Thread readInputStreamThread = new Thread(readInputStreamUDP);
+        Thread readInputStreamThread = new Thread(readInputStreamUDP, "Read input UDP");
         readInputStreamThread.start();
         
         //Listen for clients
@@ -130,20 +130,23 @@ public class DeltastreamServer{
                 else{
                     client = broadcast.listOfClients.clientHashtable.get(clientIp);
                 }
-            }
             client.socket = clientSocket; 
+            }
+            
             
             //creates thread for handling the client
             if(client.ulThread==null || !client.ulThread.isAlive()){
                 synchronized(client){
                     if(client.ulThread==null || !client.ulThread.isAlive()){
-                        Thread dlThread = new Thread( new ClientDownloadHandler(client, broadcast), "Handle Client Download ID="+client.clientSessionId);
+                        /*Thread dlThread = new Thread( new ClientDownloadHandler(client, broadcast), "Handle Client Download ID="+client.clientSessionId);
                         Thread ulThread = new Thread( new ClientUploadHandler(client, broadcast), "Handle Client Upload ID="+client.clientSessionId);
                         client.dlThread = dlThread;
                         client.ulThread = ulThread;
                         client.connected = true;
                         dlThread.start();
-                        ulThread.start();
+                        ulThread.start();*/
+                        Thread thread2 = new Thread(new ConnectToClient(client,broadcast),"Make connection thread");
+                        thread2.start();
                     }
                     else
                         System.out.println("Error: Thread and/or connection allready exists ... cought sync error");

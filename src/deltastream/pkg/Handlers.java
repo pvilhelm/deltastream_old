@@ -98,6 +98,11 @@ class ConnectToClient implements Runnable{
     public void run(){
         
         synchronized(client){ //TODO should be "thread making lock" instead
+            if(client.dlThread!=null)
+                return;
+            if(client.ulThread!=null)
+                return;
+            
             if(client.socket == null || !client.socket.isConnected() || client.socket.isClosed()){
                 try{
                     Socket socket =  new Socket(client.IP,Config.clientServerSocketPort);

@@ -73,12 +73,8 @@ public class DeltastreamClient {
             if(client.ulThread==null || !client.ulThread.isAlive()){
                 synchronized(client){
                     if(client.ulThread==null || !client.ulThread.isAlive()){
-                        Thread dlThread = new Thread( new ClientDownloadHandler(client, broadcast), "Handle Client Download ID="+client.clientSessionId);
-                        Thread ulThread = new Thread( new ClientUploadHandler(client, broadcast), "Handle Client Upload ID="+client.clientSessionId);
-                        client.dlThread = dlThread;
-                        client.ulThread = ulThread;
-                        dlThread.start();
-                        ulThread.start();
+                        Thread thread2 = new Thread(new ConnectToClient(client,broadcast),"Make connection thread");
+                        thread2.start();
                     }
                     else
                         System.out.println("Error: Thread and/or connection allready exists ... cought sync error");
