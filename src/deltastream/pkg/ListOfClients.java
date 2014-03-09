@@ -160,7 +160,7 @@ class ListOfClients{
                 outData.writeByte('c');//type of message
                 outData.writeInt(partNr);
                 outData.flush();
-                System.out.println("confirmed part rq");
+                //System.out.println("confirmed part rq");
             }
             catch(Exception ee){
                 System.out.println("Couldnt send send rq to client"+ee);   
@@ -175,7 +175,7 @@ class ListOfClients{
                 outData.writeByte('d');//type of message
                 outData.writeInt(partNr);
                 outData.flush();
-                System.out.println("Declined part rq");
+                //System.out.println("Declined part rq");
             }
             catch(Exception ee){
                 System.out.println("Couldnt send decline rq to client"+ee);    
@@ -191,7 +191,7 @@ class ListOfClients{
                 outData.writeByte('x');//type of message
                 outData.writeInt(PartN);
                 outData.flush();
-                System.out.println("Ask if he wants part: "+PartN);
+                //System.out.println("Ask if he wants part: "+PartN);
                 lastPartListRequested = new Date();
             }
             
@@ -286,7 +286,7 @@ class ListOfClients{
                 //sign here
                 OS.write(dataCopy);
                 outData.flush();
-                System.out.println("Sent part: " + partN);
+                //System.out.println("Sent part: " + partN);
             }
             catch(Exception ee){
                 System.out.println("Couldnt send part"+ee);
@@ -337,7 +337,7 @@ class ListOfClients{
                 OSData.write(allPartsBitSetAsByteArray);
                 OSData.flush();
                 lastPartListRequested = new Date(); //update last time we req part list
-                System.out.println("Sent list of parts");
+                //System.out.println("Sent list of parts");
             }
             catch(Exception ee){
                 System.out.println("coulndt provide answer to client about existing parts: "+ee);
@@ -418,7 +418,7 @@ class ListOfClients{
             bitFieldParts = BitSet.valueOf(arrByteBitParts);
             UpdateLastContact();
             lastBitSet = new Date(); //new time for last bitset
-            System.out.println("Got list of parts");
+            //System.out.println("Got list of parts");
              
         }
         void Drop(){
