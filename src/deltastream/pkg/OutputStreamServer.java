@@ -65,8 +65,12 @@ public class OutputStreamServer implements Runnable{
                     }
                 }
                 else if(errorN.getTime()+5000<(new Date()).getTime()){
+                    errorN = new Date();
                     partToGet = broadcast.parts.oldestPartId+10;//nollställer
                     System.out.println("Resetting output stream part number to:"+partToGet);
+                }
+                else{
+                    try{Thread.sleep(50);}catch(Exception ee){System.out.println("Error nr 2qweqweqweqwe");}
                 }
                 
             }
