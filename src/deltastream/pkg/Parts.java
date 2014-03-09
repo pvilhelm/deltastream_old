@@ -20,7 +20,7 @@ class Parts{
     //static Part[] allParts;//array of all parts
     Hashtable<Integer,Part> allParts;
     int newestPartId = 0; //the id of the last created part
-    int[] arrayOfPartN;
+    //int[] arrayOfPartN;
     
     BitSet allPartsBitSet;
     //byte[] allPartsBitSetAsByteArray;
@@ -31,7 +31,7 @@ class Parts{
     Parts(int nOfParts){
         
         allParts = new Hashtable(500);  
-        arrayOfPartN = new int[nOfParts];
+        //arrayOfPartN = new int[nOfParts];
         
         //allPartsBitSet = new BitSet(nOfParts);
         //allPartsBitSet.set(0, nOfParts);//create bit array with all 11111111s

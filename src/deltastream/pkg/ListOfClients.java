@@ -423,6 +423,9 @@ class ListOfClients{
                 socket.close();
                 connected = false; 
                 System.out.println("Error: Closed connection with client with IP: "+this.IP);
+                this.uploadQue.clear();
+                this.downloadQue.clear();
+                
             }
             catch(Exception ee){
                 System.out.println("Problem closing socket for client");
