@@ -46,17 +46,18 @@ public class OutputStreamServer implements Runnable{
             }   
             
             
-            int partToGet = broadcast.parts.oldestPartId+10;
+            int partToGet = broadcast.parts.oldestPartId+20;
             Date errorN = new Date();
             for(;;){//TODO add support for moar outputs and not only to 127.0.0.1
                 
-                if(partToGet != broadcast.parts.oldestPartId+10){
-                    if(partToGet+1 == broadcast.parts.oldestPartId+10){                                        
+                if(partToGet <= broadcast.parts.oldestPartId+21){
+                    if(broadcast.parts.allParts.contains(partToGet)){                                        
                         errorN = new Date();
-                        partToGet = broadcast.parts.oldestPartId+10;
+                        
                         Part part = broadcast.parts.allParts.get(partToGet);
                         try{
-                            dataOutputStream.write(part.data);
+                            //dataOutputStream.write(part.data);
+                            dataOutputStream.writeChars("part nr:"+part.partN+"\r\n");
                             dataOutputStream.flush();
 
                         }
@@ -65,11 +66,12 @@ public class OutputStreamServer implements Runnable{
                             break;
 
                         }
+                        partToGet++;
                     }
                 }
                 if(errorN.getTime()+5000<(new Date()).getTime()){
                     errorN = new Date();
-                    partToGet = broadcast.parts.oldestPartId+10;//nollställer
+                    partToGet = broadcast.parts.oldestPartId+20;//nollställer
                     System.out.println("Resetting output stream part number to:"+partToGet);
                     try{
                         dataOutputStream.writeUTF("Debugg debugg\r\n");
