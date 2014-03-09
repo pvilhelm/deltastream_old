@@ -78,10 +78,9 @@ public class OutputStreamServer implements Runnable{
                         System.out.println("Coulnt write to terminal");    
                     }
                 }
-                else{
-                    try{Thread.sleep(50);}catch(Exception ee){System.out.println("Error nr 2qweqweqweqwe");}
-                }
-                
+                //else{
+                //    try{Thread.sleep(50);}catch(Exception ee){System.out.println("Error nr 2qweqweqweqwe");}
+                //}               
             }
         }     
     }      
