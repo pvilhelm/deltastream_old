@@ -79,6 +79,7 @@ class ClientDownloadHandler implements Runnable{
                     }
                     catch(Exception ee){
                         System.out.println("couldnt read part"+ee);
+                        client.Drop();
                     }
                     break;
                 case 'q': // q = ask which parts a node has
@@ -118,6 +119,7 @@ class ClientDownloadHandler implements Runnable{
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read what part client wants"+ee);
+                        client.Drop();
                         return;
                     }
                     if(!broadcast.parts.allParts.contains(partN)){ //TODO or is downloading that part
@@ -138,6 +140,7 @@ class ClientDownloadHandler implements Runnable{
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read part id");
+                        client.Drop();
                     }
                     break;
                 case 'c'://the client wants the part
@@ -150,6 +153,7 @@ class ClientDownloadHandler implements Runnable{
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read part id");
+                        client.Drop();
                     }
                     if(partN==-1)
                         break;

@@ -292,6 +292,7 @@ class ListOfClients{
                 System.out.println("Couldnt send part"+ee);
                 //Close connection to client
                 this.Drop();
+                return;
             }
             this.uploadedParts++;
              
@@ -311,6 +312,7 @@ class ListOfClients{
             catch(Exception ee){
                 System.out.println("Couldnt send public key: "+ee);//
                 this.Drop();
+                return;
             }
             UpdateLastContact();
         }
@@ -434,7 +436,7 @@ class ListOfClients{
                 
             }
             catch(Exception ee){
-                System.out.println("Problem closing socket for client");
+                System.out.println("Problem closing socket for client in Thread:"+Thread.currentThread());
             }
             
             //broadcast.listOfClients.clientHashtable.remove(IP);
