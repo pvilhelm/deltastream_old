@@ -76,7 +76,7 @@ class Parts{
 
             allParts.put(part.partN, part);
             nOfParts++;
-            System.out.println("Saved part"+part.partN);
+            //System.out.println("Saved part"+part.partN);
             if(nOfParts>maxNOfParts){ //if too many parts
                 while(allParts.remove(oldestPartId++)==null)
                     ; //remove one TODO sync so only one oldest path etc 
