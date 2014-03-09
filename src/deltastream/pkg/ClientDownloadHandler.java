@@ -157,13 +157,7 @@ class ClientDownloadHandler implements Runnable{
                     break;
                 default:
                     System.out.println("Error: Message wrong format, no type");
-                    //TODO flush input
-                    try{
-                        client.OS.close();
-                    }
-                    catch(Exception ee){
-                        System.out.println("Problem closing socket: "+ee);
-                    }
+                    client.Drop();
                     return;//TODO REMOVE CLIENT CONNECNTIOn
                     //break;
             } 

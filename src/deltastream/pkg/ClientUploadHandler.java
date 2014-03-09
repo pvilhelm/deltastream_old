@@ -37,12 +37,7 @@ public class ClientUploadHandler implements Runnable{
         }
         catch(Exception ee){
             System.out.println("Couldn't get streams from client socket"+ee);
-            try{
-                client.socket.close();
-            }
-            catch(Exception ee2){
-                System.out.println("Problem closing socket after exception: " +ee2);
-            }
+            client.Drop();
             return;
         }
         
