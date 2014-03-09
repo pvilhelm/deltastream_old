@@ -87,14 +87,16 @@ public class DeltastreamServer{
         //will upload to known clients at "random"==smart algortim
         
 
+        
+        
+        ListOfClients.Client client2 = broadcast.listOfClients.AddClient("81.170.216.105");
+        Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
+        thread.start();
+        
         try{
             Thread.sleep(2000);
         }
         catch(Exception ee){}
-        
-        ListOfClients.Client client2 = broadcast.listOfClients.AddClient("176.10.225.120");
-        Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
-        thread.start();
          
         /*client2.SendListOfParts('q');
         client2.GetListOfParts();

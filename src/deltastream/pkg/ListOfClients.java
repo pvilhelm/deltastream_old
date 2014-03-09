@@ -76,7 +76,7 @@ class ListOfClients{
         int clientSessionId;
         Thread ulThread;
         Thread dlThread;
-        Boolean connected = true; 
+        Boolean connected = false; 
         int unsucessfullRcAttempts = 0;
         
         Client(Broadcast broadcast){

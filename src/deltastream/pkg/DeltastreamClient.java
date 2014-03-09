@@ -38,9 +38,9 @@ public class DeltastreamClient {
         Thread uploadHandlerThread = new Thread(uploadHandler,"Upload Handler");
         uploadHandlerThread.start();
         
-        OutputStreamServer outputStreamServer = new OutputStreamServer(broadcast);
+        /*OutputStreamServer outputStreamServer = new OutputStreamServer(broadcast);
         Thread outputStreamServerThread = new Thread(outputStreamServer,"OutputStreamServer");
-        outputStreamServerThread.start();
+        outputStreamServerThread.start();*/
         
         //w8 for new connections 
         for(;;){
