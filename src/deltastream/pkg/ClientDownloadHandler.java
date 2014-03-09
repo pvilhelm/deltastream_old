@@ -65,7 +65,7 @@ class ClientDownloadHandler implements Runnable{
                         ISData.readByte();
                         partN = ISData.readInt();
                         ISData.readLong();
-                        int dataLength = ISData.readShort();
+                        int dataLength = ISData.readInt();
                         data = new byte[dataLength];
                         int nReadBytes = 0;
                         while(nReadBytes<dataLength)

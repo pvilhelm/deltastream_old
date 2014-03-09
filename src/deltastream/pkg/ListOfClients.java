@@ -282,7 +282,7 @@ class ListOfClients{
                 outData.writeInt(partN);
                 outData.writeLong(timeCreated);
                 //outData.writeLong(0);
-                outData.writeShort(dataCopy.length);
+                outData.writeInt(dataCopy.length);
                 //sign here
                 OS.write(dataCopy);
                 outData.flush();

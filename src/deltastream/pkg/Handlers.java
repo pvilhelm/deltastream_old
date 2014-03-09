@@ -98,9 +98,9 @@ class ConnectToClient implements Runnable{
     public void run(){
         
         synchronized(client){ //TODO should be "thread making lock" instead
-            if(client.dlThread!=null)
+            if(client.dlThread.isAlive())
                 return;
-            if(client.ulThread!=null)
+            if(client.ulThread.isAlive())
                 return;
             
             if(client.socket == null || !client.socket.isConnected() || client.socket.isClosed()){
