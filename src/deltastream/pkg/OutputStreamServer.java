@@ -25,6 +25,7 @@ public class OutputStreamServer implements Runnable{
     public void run(){
         try{
             serverSocket = new ServerSocket(Config.clientOutputServerSocketPort,0, InetAddress.getByName(null));
+            System.out.println("Listening for output connections on port:"+Config.clientOutputServerSocketPort);
         }
         catch(Exception ee){
             System.out.println("Coulnt create output server socket"+ee);
