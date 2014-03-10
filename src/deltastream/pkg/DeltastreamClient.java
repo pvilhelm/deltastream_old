@@ -46,6 +46,10 @@ public class DeltastreamClient {
         Thread outputStreamServerThread = new Thread(outputStreamServer,"OutputStreamServer");
         outputStreamServerThread.start();*/
         
+        OutputStreamServerUDP outputStreamServerUDP = new OutputStreamServerUDP(broadcast);
+        Thread outputStreamServerUDPThread = new Thread(outputStreamServerUDP,"OutputStreamServerUDP");
+        outputStreamServerUDPThread.start();
+        
         //w8 for new connections 
         for(;;){
             Socket clientSocket;
