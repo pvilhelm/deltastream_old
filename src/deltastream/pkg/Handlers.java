@@ -359,7 +359,7 @@ class ReadInputStreamUDP implements Runnable{
         for(;;){
             broadcast.oldDatagramLength = 0;
             try{
-                broadcast.inputSSS = new ServerSocket(81); //creates a server socked that accepts i stream of some sort
+                broadcast.inputSSS = new ServerSocket(1081); //creates a server socked that accepts i stream of some sort
                 broadcast.inputSSS.setReceiveBufferSize(100000);
             }
             catch(Exception ee){
