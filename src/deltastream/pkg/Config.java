@@ -20,10 +20,10 @@ public class Config {
     public static int SamplingPeriod = 100;  //time in ms for sampling the input stream
     public static int timeLimit = 60*1000;   //how old a part is allowed to be in the broadcast
     public static int nOfParts = timeLimit/SamplingPeriod+10; //how many parts to save (internal use)
-    public static int clientServerSocketPort = 82;   //the port for generic com with clients
-    public static int clientDLUPServerSocketPort = 83;   //the port for generic com with clients
+    public static int clientServerSocketPort = 1082;   //the port for generic com with clients
+    public static int clientDLUPServerSocketPort = 1083;   //the port for generic com with clients
     public static int genericStreamBufferSize = 1000000; //the buffer size in bytes for some streams
-    public static int clientOutputServerSocketPort = 84 ;
+    public static int clientOutputServerSocketPort = 1084 ;
     public static int maxRqPartsQueSize = 2000;
     public static int localUDPOutputStreamPort = 4444;
     public static int remoteUDPOutputStreamPort = 4444;
