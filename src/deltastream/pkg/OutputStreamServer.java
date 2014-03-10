@@ -71,6 +71,10 @@ class OutputStreamServerUDP implements Runnable{
                     System.out.println("Resetting output stream part number to:"+partToGet);
                 }                            
             }
+            try{
+                Thread.sleep(4000);
+            }
+            catch(Exception ee){;}
             serverSocket.close();
         }     
     }      
