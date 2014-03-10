@@ -14,6 +14,28 @@ import java.util.Hashtable;
 import java.util.Timer;
 import java.util.TimerTask;
 
+class CleanRqList extends TimerTask{
+    Broadcast broadcast; 
+    CleanRqList(Broadcast broadcast){
+        this.broadcast = broadcast;
+    }
+    
+    @Override
+    public void run(){
+        try{
+            int size = broadcast.requestedParts.size();
+            for(int i=0;i<size/2;i++){
+                broadcast.requestedParts.remove();
+            }
+            while(broadcast.requestedParts.size() > Config.maxRqPartsQueSize)
+                broadcast.requestedParts.remove();
+        }
+        catch(Exception ee){
+            System.out.println("Error: Que requestedParts empty, tried to remove head anyways");
+        }
+    }    
+}
+
 class UploadHandler implements Runnable{
     //this class handles the uploads to the clients
     
@@ -98,9 +120,9 @@ class ConnectToClient implements Runnable{
     public void run(){
         
         synchronized(client){ //TODO should be "thread making lock" instead
-            if(client.dlThread.isAlive())
+            if(client.dlThread != null && client.dlThread.isAlive())
                 return;
-            if(client.ulThread.isAlive())
+            if(client.ulThread != null &&client.ulThread.isAlive())
                 return;
             
             if(client.socket == null || !client.socket.isConnected() || client.socket.isClosed()){

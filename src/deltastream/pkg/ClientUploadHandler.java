@@ -90,6 +90,7 @@ public class ClientUploadHandler implements Runnable{
                      if(partNr==-1)
                          break;//TODO some error managment
                      client.ConfirmPartRq(partNr);
+                     
                      break;
                  case 'p'://p = send part
                      partNr = client.TakeUlQue();

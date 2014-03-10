@@ -10,6 +10,7 @@ import java.security.PublicKey;
 import java.security.Signature;
 import java.net.*;
 import java.security.PrivateKey;
+import java.util.concurrent.BlockingQueue;
 
 /**
  *
@@ -17,6 +18,7 @@ import java.security.PrivateKey;
  */
 
 public class Broadcast{
+    BlockingQueue<Integer> requestedParts;
     PrivateKey priv;
     int timeLimit;
     long broadcastId; //the broadcast Id

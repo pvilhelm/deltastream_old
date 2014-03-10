@@ -76,6 +76,7 @@ class ClientDownloadHandler implements Runnable{
                         Part part = new Part(partN, data); //TODO check signature
                         broadcast.parts.PutPart(part);
                         client.downloadedParts++;
+                        broadcast.requestedParts.remove(partN);
                     }
                     catch(Exception ee){
                         System.out.println("couldnt read part"+ee);
@@ -122,8 +123,9 @@ class ClientDownloadHandler implements Runnable{
                         client.Drop();
                         return;
                     }
-                    if(!broadcast.parts.allParts.contains(partN)){ //TODO or is downloading that part
+                    if(!broadcast.parts.allParts.contains(partN) && !broadcast.requestedParts.contains(partN)){ //TODO or is downloading that part
                             client.PutUlQue('c', partN);
+                            broadcast.requestedParts.offer(partN);
                             //System.out.println("Dont have that part accepted");
                     }
                     else{

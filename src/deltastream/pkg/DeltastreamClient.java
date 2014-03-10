@@ -33,6 +33,10 @@ public class DeltastreamClient {
             System.out.println("Couldn't set up Client Server Socket"+ee);
         }
         
+        //Clean up the list of requested parts every 5 second. 
+        Timer timer2 = new Timer("Clean Rq list");
+        timer2.schedule(new CleanRqList(broadcast), 5000, 5000);//
+        
         //init upload handler
         /*UploadHandler uploadHandler = new UploadHandler(broadcast);
         Thread uploadHandlerThread = new Thread(uploadHandler,"Upload Handler");

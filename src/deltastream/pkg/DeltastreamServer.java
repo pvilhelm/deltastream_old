@@ -31,6 +31,10 @@ public class DeltastreamServer{
         readInputStreamThread.start();
         */
         
+        //Clean up the list of requested parts every 5 second. 
+        Timer timer2 = new Timer("Clean Rq list");
+        timer2.schedule(new CleanRqList(broadcast), 5000, 5000);//
+        
         //Sample the input stream every SamplingPeriod ms
         ReadInputStreamUDP readInputStreamUDP = new ReadInputStreamUDP(broadcast);
         Thread readInputStreamThread = new Thread(readInputStreamUDP, "Read input UDP");
@@ -106,3 +110,4 @@ public class DeltastreamServer{
         }
     }   
 }
+

@@ -7,7 +7,9 @@ import java.security.KeyPairGenerator;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.util.Random;
-
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+ 
 /**
  *
  * @author servos
@@ -22,6 +24,10 @@ public class Config {
     public static int clientDLUPServerSocketPort = 83;   //the port for generic com with clients
     public static int genericStreamBufferSize = 1000000; //the buffer size in bytes for some streams
     public static int clientOutputServerSocketPort = 84 ;
+    public static int maxRqPartsQueSize = 2000;
+    public static int localUDPOutputStreamPort = 4444;
+    public static int remoteUDPOutputStreamPort = 4444;
+    public static String remoteUDPOutputStreamIP = "127.0.0.1";
     Config(String[] args){
         //arguments go here
     }
@@ -34,8 +40,9 @@ public class Config {
         broadcast.broadcastId = rand.nextLong();
         broadcast.listOfClients = new ListOfClients(broadcast);
         broadcast.parts = new Parts(nOfParts); //init the array of parts (i.e. the parts of a stream)
+        broadcast.requestedParts = new LinkedBlockingQueue();
         
-        //setup DSA signature
+        //setup DSA signatures
         
         try{
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
