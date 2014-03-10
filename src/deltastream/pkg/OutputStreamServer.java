@@ -59,7 +59,7 @@ class OutputStreamServerUDP implements Runnable{
                             }
                         }
                         catch(Exception ee){
-                            System.out.println("Couldnt write to output. ");
+                            System.out.println("Couldnt write to output. "+ee.toString());
                             break;
                         }
                         partToGet++;
