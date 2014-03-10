@@ -123,7 +123,7 @@ class ClientDownloadHandler implements Runnable{
                         client.Drop();
                         return;
                     }
-                    if(!broadcast.parts.allParts.containsKey(partN) || !broadcast.requestedParts.contains(partN)){ //TODO or is downloading that part
+                    if(!broadcast.parts.allParts.containsKey(partN) && !broadcast.requestedParts.contains(partN)){ //TODO or is downloading that part
                             client.PutUlQue('c', partN);
                             broadcast.requestedParts.offer(partN);
                             //System.out.println("Dont have that part accepted");
