@@ -220,23 +220,37 @@ class MakePartsUDP extends TimerTask{
             System.out.println("Coulnt read how many bytes avaible in make parts task");
             return;
         }
+        
+        ByteArrayOutputStream bAOutputStream = new ByteArrayOutputStream(1000000);
+        DataOutputStream dataOutStream = new DataOutputStream(bAOutputStream);
+        
         int readBytes = 0;
         int datagramL;
         try{
             if(broadcast.oldDatagramLength!=0){
                 datagramL = broadcast.oldDatagramLength;
                 broadcast.oldDatagramLength = 0;
-                if(datagramL<=nrOfBytes)
-                        readBytes += internalInputStream.read(buffer, 0, nrOfBytes);
-
+                if(datagramL<=nrOfBytes){
+                    dataOutStream.writeShort(datagramL);
+                    //readBytes+=2;
+                    readBytes += internalInputStream.read(buffer, 0, datagramL);
+                    bAOutputStream.write(buffer, 0, datagramL);
+                    
                 }
-
+                else{//för lite data igen
+                    broadcast.oldDatagramLength = datagramL;
+                    return;
+                }
+            }
             for(;readBytes+2<nrOfBytes;){
                 datagramL = dataIn.readShort();
                 readBytes+=2;
-                
-                if(readBytes+datagramL<=nrOfBytes)
-                    readBytes += internalInputStream.read(buffer, readBytes, nrOfBytes);
+                if(readBytes+datagramL<=nrOfBytes){
+                    dataOutStream.writeShort(datagramL);
+                    
+                    readBytes += internalInputStream.read(buffer, 0, datagramL);
+                    bAOutputStream.write(buffer, 0, datagramL);
+                }
                 else{//not enough data in input stream
                     broadcast.oldDatagramLength = datagramL;
                     break;
@@ -246,7 +260,7 @@ class MakePartsUDP extends TimerTask{
         catch(Exception ee){
             System.out.println("Couldnt read buffer in making parts");
         }
-        broadcast.parts.Put(Arrays.copyOfRange(buffer,0, nrOfBytes));
+        broadcast.parts.Put(bAOutputStream.toByteArray());
         
         /*try{
             System.out.println(buffer[0] +" "+ nrOfBytes);
@@ -339,9 +353,10 @@ class ReadInputStreamUDP implements Runnable{
     @Override 
     public void run(){
         for(;;){
+            broadcast.oldDatagramLength = 0;
             try{
                 broadcast.inputSSS = new ServerSocket(81); //creates a server socked that accepts i stream of some sort
-                broadcast.inputSSS.setReceiveBufferSize(10000);
+                broadcast.inputSSS.setReceiveBufferSize(100000);
             }
             catch(Exception ee){
                 System.out.println("Couln't create Server Socket: " + ee);
@@ -355,7 +370,7 @@ class ReadInputStreamUDP implements Runnable{
             try{       
                 s = broadcast.inputSSS.accept(); //accepts a connection on that socket
                 s.setSendBufferSize(2000);
-                s.setReceiveBufferSize(1000000);
+                s.setReceiveBufferSize(100000);
                 System.out.println("Stream source connected on port: " + s.getPort()+" from IP: "+s.getInetAddress());
                 s.setSoTimeout(0); ///<--remeber to remove
             }
@@ -419,6 +434,7 @@ class ReadInputStreamUDP implements Runnable{
                 try{ 
                     dataOutInternal.writeShort(datagramL);
                     internalOutputStreamBuffered.write(buffer,0,datagramL);
+                    internalOutputStreamBuffered.flush();
                 }
                 catch(Exception ee){
                     System.out.println("Couldnt write to internal piped stream");
