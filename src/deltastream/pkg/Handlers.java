@@ -136,6 +136,10 @@ class ConnectToClient implements Runnable{
                 catch(Exception ee){
                     System.out.println("Couldnt create streams in ConnectedToClient");
                     client.unsucessfullRcAttempts++;
+                    if(client.unsucessfullRcAttempts>15){
+                        client.Drop();
+                        broadcast.listOfClients.RemoveClient(client);
+                    }
                     //TODO add reomve client thingy here when to many failed rc attemps
                     return;
                 }
