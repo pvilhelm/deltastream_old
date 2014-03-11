@@ -53,9 +53,9 @@ public class DeltastreamServer{
         //init upload handler
         //will upload to known clients at "random"==smart algortim
 
-        ListOfClients.Client client2 = broadcast.listOfClients.AddClient("81.170.216.105");
+        /*ListOfClients.Client client2 = broadcast.listOfClients.AddClient("94.254.51.17");
         Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
-        thread.start();
+        thread.start();*/
         
         try{
             Thread.sleep(2000);

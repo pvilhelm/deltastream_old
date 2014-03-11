@@ -25,7 +25,7 @@ public class UDPtoTCPStreamer {
 
                 serverSocket = new DatagramSocket(5555);
                 //DatagramSocket outSocket = new DatagramSocket(4321);
-                socketOut = new Socket("127.0.0.1",81); //open socket to deltastream server
+                socketOut = new Socket("127.0.0.1",1081); //open socket to deltastream server
 
                 //SocketAddress remoteAddr =new InetSocketAddress("127.0.0.1",4321);
                 BufferedOutputStream outputStream = new BufferedOutputStream(socketOut.getOutputStream());
