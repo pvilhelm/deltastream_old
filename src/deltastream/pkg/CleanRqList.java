@@ -15,8 +15,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
- * @author fisksoppa
+ * Does some clean up in a list of parts the client has requested.
+ * 
+ * Every some seconds the list is halved. Every entry with index over 
+ * Config.maxRqPartsQueSize is deleted. 
+ * 
+ * @author Petter Tomner
  */
 public class CleanRqList extends TimerTask{
     Broadcast broadcast; 

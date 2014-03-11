@@ -9,8 +9,14 @@ import java.io.*;
  
 import java.net.*;
 /**
- *
- * @author servos
+ *  This class handles uploads to ANOTHER client.
+ * 
+ *  One instance thread of this class is spawned for each connected client. The 
+ * thread can be killed without dropping the client from the client list for 
+ * later reconnects. 
+ * 
+
+ * @author Petter Tomner
  */
 public class ClientUploadHandler implements Runnable{
     
@@ -20,7 +26,16 @@ public class ClientUploadHandler implements Runnable{
     String clientIp;
     ListOfClients.Client client;
     Broadcast broadcast;
-    ClientUploadHandler(ListOfClients.Client client, Broadcast broadcast){
+    
+    /**
+     * 
+     * @param client the client this instance handles uploads to.
+     * @param broadcast the broadcast the client belongs to.
+     * 
+     */
+    
+    
+    public ClientUploadHandler(ListOfClients.Client client, Broadcast broadcast){
             ID = 0;
             type = 0;
             this.broadcast = broadcast; 

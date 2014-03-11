@@ -19,5 +19,6 @@ I klienten kan sedan en VLC spela upp strömmen med:
 
 Öppna nätverksström -> udp://@127.0.0.1:4444
 
-För en mer ingående beskrivning av exakt hur programmet är uppbyggt, se index.html.
+För en mer ingående beskrivning av exakt hur programmet är uppbyggt, se 
+dokumentationen i /dist/javadoc/index.html.
 

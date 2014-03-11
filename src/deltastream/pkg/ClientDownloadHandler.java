@@ -12,7 +12,17 @@ import java.io.*;
 import java.io.OutputStream;
 import java.net.Socket;
 
-class ClientDownloadHandler implements Runnable{
+/**
+ * This class handles downloads from ANOTHER client.
+ * 
+ * Each TCP connection to the local instance of this program spawn one 
+ * ClientDownLoadHandler thread. The thread might be closed with out 
+ * removing the client from the clientlist.  
+ * 
+ * @author Petter Tomner
+ */
+
+public class ClientDownloadHandler implements Runnable{
 
     DataInputStream ISData;
     int type;
@@ -20,7 +30,14 @@ class ClientDownloadHandler implements Runnable{
     String clientIp;
     ListOfClients.Client client;
     Broadcast broadcast;
-    ClientDownloadHandler(ListOfClients.Client client, Broadcast broadcast){
+    
+    /**
+     * 
+     * @param client the client instance that is handled by this instance.
+     * @param broadcast the broadcast instance the client belongs to
+     */
+    
+    public ClientDownloadHandler(ListOfClients.Client client, Broadcast broadcast){
             ID = 0;
             type = 0;
             this.broadcast = broadcast; 
