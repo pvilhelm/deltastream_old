@@ -42,6 +42,10 @@ public class DeltastreamClient {
         Thread uploadHandlerThread = new Thread(uploadHandler,"Upload Handler");
         uploadHandlerThread.start();*/
         
+        ListOfClients.Client client2 = broadcast.listOfClients.AddClient("85.24.167.217");
+        Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
+        thread.start();
+        
         /*OutputStreamServer outputStreamServer = new OutputStreamServer(broadcast);
         Thread outputStreamServerThread = new Thread(outputStreamServer,"OutputStreamServer");
         outputStreamServerThread.start();*/

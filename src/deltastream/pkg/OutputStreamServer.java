@@ -26,7 +26,7 @@ class OutputStreamServerUDP implements Runnable{
  
         for(;;){//listen for incoming output socket request    
             try{
-            serverSocket = new DatagramSocket(Config.localUDPOutputStreamPort);
+            serverSocket = new DatagramSocket();
             System.out.println("Will sen output UDP stream from port:"+Config.localUDPOutputStreamPort);
             }
             catch(Exception ee){
@@ -75,7 +75,8 @@ class OutputStreamServerUDP implements Runnable{
                 Thread.sleep(4000);
             }
             catch(Exception ee){;}
-            serverSocket.close();
+            if(serverSocket!=null)
+                serverSocket.close();
         }     
     }      
 }
