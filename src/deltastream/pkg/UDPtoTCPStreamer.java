@@ -18,7 +18,7 @@ import java.security.*;
  * data length as a TCP stream to {@link ReadInputStreamUDP}.
  * <p>
  * (Ugly workaround solution should be directly implemented in {@link ReadInputStream})
- * (Run this as a separate process or w/e)
+ * 
  * 
  * @author Petter Tomner 
  */
