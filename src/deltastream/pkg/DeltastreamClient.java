@@ -13,8 +13,12 @@ import java.util.*;
 import java.lang.*;
 import java.security.*;
 /**
- *
- * @author servos
+ * The main loop of a Deltastream Client.
+ * 
+ * A instance of this class spawns the other threads and is then listening for 
+ * incoming connection attempts. 
+ * 
+ * @author Petter Tomner
  */
 public class DeltastreamClient {
     //this is a client that receives part from the swarm and puts them together to a generic byte stream

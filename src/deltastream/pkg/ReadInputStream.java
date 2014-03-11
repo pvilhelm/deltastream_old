@@ -15,8 +15,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
- * @author fisksoppa
+ * Reads the tcp input stream on the server.
+ * 
+ * Then sends the stream through a pipe @see MakeParts, which makes parts of the
+ * stream at a specified time interval. 
+ * 
+ * @author Petter Tomner 
  */
 
 public class ReadInputStream implements Runnable{
@@ -24,7 +28,13 @@ public class ReadInputStream implements Runnable{
     InputStream BufferedInDataStream;
     Broadcast broadcast;
     
-    ReadInputStream(InputStream BufferedInDataStream, Broadcast broadcast){
+    /**
+     * 
+     * @param BufferedInDataStream the input stream that is connected to the source stream
+     * @param broadcast the broadcast this stream belongs to
+     */
+    
+    public ReadInputStream(InputStream BufferedInDataStream, Broadcast broadcast){
         this.BufferedInDataStream = BufferedInDataStream;
         this.broadcast = broadcast;
     }

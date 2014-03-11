@@ -12,7 +12,16 @@ import java.util.TimerTask;
 
 /**
  *
- * @author fisksoppa
+ * Makes parts out of a stream buffer.
+ * 
+ * The piped stream from @see ReadInputStream is read by this class instance and then made into a part, 
+ * ready to be transmitted to the other clients. 
+ * <p>
+ * Instances of this class is spawned by a timer at intervals corresponding to 
+ * sample time provided by @see Config. 
+ * 
+ * @author Petter Tomner
+ * 
  */
 
 public class MakeParts extends TimerTask{
@@ -20,7 +29,15 @@ public class MakeParts extends TimerTask{
     BufferedInputStream internalInputStream;
     byte[] buffer;
     
-    MakeParts(BufferedInputStream internalInputStream, Broadcast broadcast, byte[] buffer){
+    /**
+     * 
+     * @param internalInputStream the piped stream from ReadInputStream
+     * @param broadcast the broadcast this parts belongs to
+     * @param buffer a buffer provided (to help the poor garbage garbage collector)
+     */
+    
+    
+    public MakeParts(BufferedInputStream internalInputStream, Broadcast broadcast, byte[] buffer){
         this.broadcast = broadcast;
         this.internalInputStream = internalInputStream;
         this.buffer = buffer;

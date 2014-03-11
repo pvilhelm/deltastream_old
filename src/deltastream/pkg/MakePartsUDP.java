@@ -13,16 +13,32 @@ import java.io.DataOutputStream;
 import java.util.TimerTask;
 
 /**
- *
- * @author fisksoppa
+ * Makes parts out of a UDP stream buffer.
+ * 
+ * The piped stream from @see ReadInputStreamUDP is read by this class instance and then made into a part, 
+ * ready to be transmitted to the other clients. 
+ * <p>
+ * Instances of this class is spawned by a timer at intervals corresponding to 
+ * sample time provided by @see Config. 
+ * <p>
+ * The parts are made in such a way that a UDP datagram is not split up between 
+ * two parts.
+ * 
+ * @see ReadInputStream
+ * @author Petter Tomner
  */
 
 public class MakePartsUDP extends TimerTask{
     Broadcast broadcast;
     BufferedInputStream internalInputStream;
     byte[] buffer;
-    
-    MakePartsUDP(BufferedInputStream internalInputStream, Broadcast broadcast, byte[] buffer){
+     /**
+     * 
+     * @param internalInputStream the piped stream from ReadInputStream
+     * @param broadcast the broadcast this parts belongs to
+     * @param buffer a buffer provided (to help the poor garbage garbage collector)
+     */
+    public MakePartsUDP(BufferedInputStream internalInputStream, Broadcast broadcast, byte[] buffer){
         this.broadcast = broadcast;
         this.internalInputStream = internalInputStream;
         this.buffer = buffer;

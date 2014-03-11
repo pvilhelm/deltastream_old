@@ -9,8 +9,12 @@ package deltastream.pkg;
 import java.util.Date;
 
 /**
+ * Handles uploads for ANOTHER client.
+ * 
+ * A thread instance of this class is spawned to handle the uploads that is sent
+ * to the remote client from the local client/server.
  *
- * @author fisksoppa
+ * @author Petter Tomner
  */
 
 public class UploadHandler implements Runnable{
@@ -18,7 +22,11 @@ public class UploadHandler implements Runnable{
     
     
     Broadcast broadcast;
-    UploadHandler(Broadcast broadcast){
+    /**
+     * 
+     * @param broadcast the broadcast the handler belongs to
+     */
+    public UploadHandler(Broadcast broadcast){
         this.broadcast = broadcast;
     }
     

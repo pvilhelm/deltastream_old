@@ -11,8 +11,11 @@ import java.util.Date;
 import java.util.*;
 
 /**
- *
- * @author servos
+ * This is a object list of all the parts.
+ * 
+ * Each part is put into this list. 
+ * 
+ * @author Petter Tomner 
  */
 //object with all the parts
 public class Parts{
@@ -30,9 +33,9 @@ public class Parts{
     
     /**
      *
-     * @param nOfParts
+     * a hashtable of default length is created
      */
-    public Parts(int nOfParts){
+    public Parts(){
         
         allParts = new Hashtable(500);  
         //arrayOfPartN = new int[nOfParts];

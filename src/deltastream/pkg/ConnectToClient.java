@@ -12,8 +12,11 @@ import java.net.Socket;
 import java.util.Date;
 
 /**
+ * A instance of this class is spawned to connect to a client. 
+ * 
+ * To not block the thread that spawned it while trying to connect. 
  *
- * @author fisksoppa
+ * @author Petter Tomner
  */
 
 public class ConnectToClient implements Runnable{
@@ -21,7 +24,12 @@ public class ConnectToClient implements Runnable{
     ListOfClients.Client client;
     Broadcast broadcast;
     
-    ConnectToClient(ListOfClients.Client client, Broadcast broadcast){
+    /**
+     * 
+     * @param client the client to try to connect to
+     * @param broadcast the broadcast to which the client belongs
+     */
+    public ConnectToClient(ListOfClients.Client client, Broadcast broadcast){
         this.client = client;
         this.broadcast = broadcast;
     }

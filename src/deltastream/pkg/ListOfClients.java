@@ -13,8 +13,12 @@ import java.lang.*;
 import java.util.concurrent.*;
 
 /**
- *
- * @author fisksoppa
+ * This is a list of clients connected.
+ * 
+ * Each connecting client is added to this list. A lot of the client interaction
+ * is handled by the subclass Client. 
+ * 
+ * @author Petter Tomner
  */
 public class ListOfClients{
     Broadcast broadcast;

@@ -7,14 +7,27 @@ import java.util.*;
 import java.lang.*;
 import java.security.*;
 
+/**
+ * This is a UDP stream output from the application.
+ * 
+ * Connect the UDP stream to w/e and it will be the same stream that was put into
+ * the server. 
+ * 
+ * @author Petter Tomner
+ */
+
 class OutputStreamServerUDP implements Runnable{
     // This class provides a server for putting the parts together and outputting the input stream
     
     Parts parts;
     Broadcast broadcast; 
     DatagramSocket serverSocket;
-    
-    OutputStreamServerUDP(Broadcast thisBroadcast){
+    /**
+     * 
+     * 
+     * @param thisBroadcast the broadcast this output stream belongs to
+     */
+    public OutputStreamServerUDP(Broadcast thisBroadcast){
         
         broadcast = thisBroadcast;     
         parts = broadcast.parts; 

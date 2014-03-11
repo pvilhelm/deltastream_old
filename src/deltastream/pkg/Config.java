@@ -91,7 +91,7 @@ public class Config {
         Random rand = new Random();
         broadcast.broadcastId = rand.nextLong();
         broadcast.listOfClients = new ListOfClients(broadcast);
-        broadcast.parts = new Parts(nOfParts); //init the array of parts (i.e. the parts of a stream)
+        broadcast.parts = new Parts(); //init the array of parts (i.e. the parts of a stream)
         broadcast.requestedParts = new LinkedBlockingQueue();
         
         //setup DSA signatures

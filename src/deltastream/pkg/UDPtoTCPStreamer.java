@@ -11,8 +11,16 @@ import java.util.*;
 import java.lang.*;
 import java.security.*;
 /**
- *
- * @author servos
+ * Repackages a UDP stream to a TCP-stream.
+ * 
+ * The UDP-stream source connects to this input. Each UDP datagram is then 
+ * stripped of its header and sent together with it's
+ * data length as a TCP stream to @see ReadInputStreamUDP.
+ * <p>
+ * (Ugly workaround solution should be directly implemented in RaedInputStream)
+ * (Run this as a separate process or w/e)
+ * 
+ * @author Petter Tomner 
  */
 public class UDPtoTCPStreamer {
         static DatagramSocket serverSocket;

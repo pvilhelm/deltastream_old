@@ -19,17 +19,23 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
- * @author fisksoppa
+ * Reads the TCP-FORWARDED UDP input stream on the server.
+ * 
+ * Then sends the stream through a pipe @see MakePartsUDP, which makes parts of the
+ * stream at a specified time interval. 
+ * 
+ * @author Petter Tomner 
  */
-
 
 public class ReadInputStreamUDP implements Runnable{
     //här ska instreamen samplas ... 
     
     Broadcast broadcast;
-    
-    ReadInputStreamUDP(Broadcast broadcast){
+    /**
+     * 
+     * @param broadcast the broadcast this stream belongs to
+     */
+    public ReadInputStreamUDP(Broadcast broadcast){
         
         this.broadcast = broadcast;
     }

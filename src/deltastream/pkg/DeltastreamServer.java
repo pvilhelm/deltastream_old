@@ -14,9 +14,14 @@ import java.lang.*;
 import java.security.*;
 
 /**
+ * The main loop of a Deltastream Server.
+ * 
+ * A instance of this class spawns the other threads and is then listening for 
+ * incoming connection attempts.  
  *
- * @author fisksoppa
+ * @author Petter Tomner
  */
+
 public class DeltastreamServer{
 
     /**
