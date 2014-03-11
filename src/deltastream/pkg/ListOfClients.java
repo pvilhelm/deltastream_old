@@ -12,7 +12,11 @@ import java.net.*;
 import java.lang.*;
 import java.util.concurrent.*;
 
-class ListOfClients{
+/**
+ *
+ * @author fisksoppa
+ */
+public class ListOfClients{
     Broadcast broadcast;
     Random rand;
     int nClients; //number of clients in list
@@ -22,21 +26,35 @@ class ListOfClients{
         clientHashtable = new Hashtable(1400);
         this.broadcast = broadcast; 
         rand = new Random();
-    } 
-    
-    Client AddClient(String key){
+    }
+
+    /**
+     *
+     * @param key
+     * @return
+     */
+    public Client AddClient(String key){
         Client client = new Client(broadcast);
         client.IP = key;
         clientHashtable.put(key, client);
         return client;
     }
-    void RemoveClient(Client client){
+
+    /**
+     *
+     * @param client
+     */
+    public void RemoveClient(Client client){
         clientHashtable.remove(client.IP);
         client.Drop();
         //client = null; //är detta nödvändigt? ... D:
     }
     
-    Client PickClientForUpload(){
+    /**
+     *
+     * @return
+     */
+    public Client PickClientForUpload(){
         //picks a client for a upload of a part
         //as this is a server it will pick kinda random
         //but clients should pick clients that deserves uploads
@@ -47,7 +65,10 @@ class ListOfClients{
          
     }
             
-    class Client{
+    /**
+     *
+     */
+    public class Client{
         Object lockUPDL; //all things that wanna use this client for uploading/dling MUST use this
         Boolean willBeDroped;
         BufferedInputStream IS;
@@ -105,7 +126,11 @@ class ListOfClients{
             return true; //TODO error echeck
         }
         
-        int GetDlQue(){
+        /**
+         *
+         * @return
+         */
+        public int GetDlQue(){
             try{
                 return downloadQue.take();
             }
@@ -119,8 +144,15 @@ class ListOfClients{
         /* IsUlQueFull(int n){//checks if u can add n posts 
             return uploadQue.remainingCapacity()>=n;
         }*/
+
+        /**
+         *
+         * @param type
+         * @return
+         */
         
-        synchronized boolean PutUlQue(int type){
+        
+        public synchronized boolean PutUlQue(int type){
             try{
                 uploadQue.put(type);
                 return true;
@@ -131,7 +163,13 @@ class ListOfClients{
             }
         }
         
-        synchronized boolean PutUlQue(int first, int sec){
+        /**
+         *
+         * @param first
+         * @param sec
+         * @return
+         */
+        public synchronized boolean PutUlQue(int first, int sec){
             try{
                 uploadQue.put(first);
                 uploadQue.put(sec);
@@ -143,7 +181,11 @@ class ListOfClients{
             }
         }
         
-        int TakeUlQue(){
+        /**
+         *
+         * @return
+         */
+        public int TakeUlQue(){
             try{
                 return uploadQue.take();
             }
@@ -153,7 +195,11 @@ class ListOfClients{
             }
         }
         
-        void ConfirmPartRq(int partNr){
+        /**
+         *
+         * @param partNr
+         */
+        public void ConfirmPartRq(int partNr){
             DataOutputStream outData = new DataOutputStream(OS);
             try{
                 outData.writeLong(broadcast.broadcastId); //writes broadcast ID
@@ -168,7 +214,11 @@ class ListOfClients{
             }  
         }
         
-        void DeclinePartRq(int partNr){
+        /**
+         *
+         * @param partNr
+         */
+        public void DeclinePartRq(int partNr){
             DataOutputStream outData = new DataOutputStream(OS);
             try{
                 outData.writeLong(broadcast.broadcastId); //writes broadcast ID
@@ -183,7 +233,11 @@ class ListOfClients{
             }     
         }
         
-        void AskSendPart(int PartN){
+        /**
+         *
+         * @param PartN
+         */
+        public void AskSendPart(int PartN){
             //check if the client wants the part        
             DataOutputStream outData = new DataOutputStream(OS);
             try{
@@ -201,7 +255,11 @@ class ListOfClients{
             }
         }
         
-        int PickPartItNeeds(){
+        /**
+         *
+         * @return
+         */
+        public int PickPartItNeeds(){
             //pick a part this client need weighted after how much it needs it
             // TODO - the wighting ... later parts should be wieghted
             // TODO - this should be redone ... so that prior to each part exchange
@@ -254,11 +312,18 @@ class ListOfClients{
             return partNrRnd+myOldestPartId;
         }
         
-        void UpdateLastContact(){
+        /**
+         *
+         */
+        public void UpdateLastContact(){
             lastContact = new Date(); 
         }
         
-        void SendPart(int partNr){
+        /**
+         *
+         * @param partNr
+         */
+        public void SendPart(int partNr){
             //send part to client
             DataOutputStream outData = new DataOutputStream(OS);
              
@@ -298,7 +363,10 @@ class ListOfClients{
              
         } 
 
-        synchronized void SendKey(){
+        /**
+         *
+         */
+        public synchronized void SendKey(){
             DataOutputStream OSData = new DataOutputStream(OS);
             try{
                 OSData.writeLong(broadcast.broadcastId);
@@ -317,7 +385,11 @@ class ListOfClients{
             UpdateLastContact();
         }
 
-        void SendListOfParts(char type){
+        /**
+         *
+         * @param type
+         */
+        public void SendListOfParts(char type){
             DataOutputStream OSData = new DataOutputStream(OS);
             try{
                 //cache of the parts to be sent so they dont change during transmission
@@ -369,9 +441,11 @@ class ListOfClients{
                 System.out.println("Coudlnt close socekts"+ee);
             }
         }*/
-     
-        
-        void GetListOfParts(){
+
+        /**
+         *
+         */
+        public void GetListOfParts(){
             //read incoming data save as parts for this client
             short lengthData = 0;
 
@@ -421,7 +495,11 @@ class ListOfClients{
             //System.out.println("Got list of parts");
              
         }
-        void Drop(){
+
+        /**
+         *
+         */
+        public void Drop(){
             //drop the client connection
             try{
                 socket.close();

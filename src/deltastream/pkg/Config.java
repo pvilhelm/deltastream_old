@@ -11,25 +11,77 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
  
 /**
- *
- * @author servos
+ * This class contains a default config for a broadcast.
+ * 
+ * Call method CreateBroadcast to create a broadcast. 
+ * 
+ * @author Petter Tomner
  */
 public class Config {
     //this is a global conig class
-    public static int inputStreamPort = 81;  //the port listening the extrenal stream to be broadcasted
+
+    /**
+     *
+     */
+        public static int inputStreamPort = 81;  //the port listening the extrenal stream to be broadcasted
+
+    /**
+     *
+     */
     public static int SamplingPeriod = 100;  //time in ms for sampling the input stream
+
+    /**
+     *
+     */
     public static int timeLimit = 60*1000;   //how old a part is allowed to be in the broadcast
+
+    /**
+     *
+     */
     public static int nOfParts = timeLimit/SamplingPeriod+10; //how many parts to save (internal use)
+
+    /**
+     *
+     */
     public static int clientServerSocketPort = 1082;   //the port for generic com with clients
+
+    /**
+     *
+     */
     public static int clientDLUPServerSocketPort = 1083;   //the port for generic com with clients
+
+    /**
+     *
+     */
     public static int genericStreamBufferSize = 1000000; //the buffer size in bytes for some streams
+
+    /**
+     *
+     */
     public static int clientOutputServerSocketPort = 1084 ;
+
+    /**
+     *
+     */
     public static int maxRqPartsQueSize = 2000;
+
+    /**
+     *
+     */
     public static int localUDPOutputStreamPort = 4444;
+
+    /**
+     *
+     */
     public static int remoteUDPOutputStreamPort = 4444;
+
+    /**
+     *
+     */
     public static String remoteUDPOutputStreamIP = "127.0.0.1";
+    
     Config(String[] args){
-        //arguments go here
+        //arguments go here TODO
     }
     
     Broadcast CreateBroadcast(){

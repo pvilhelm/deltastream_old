@@ -13,12 +13,21 @@ import java.util.*;
 import java.lang.*;
 import java.security.*;
 
-
-
+/**
+ *
+ * @author fisksoppa
+ */
 public class DeltastreamServer{
 
+    /**
+     *
+     */
     public static Config config;
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         // TODO code application logic here
         config = new Config(args);

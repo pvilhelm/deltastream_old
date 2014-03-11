@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package deltastream.pkg;
 
 import java.security.PublicKey;
@@ -13,8 +7,15 @@ import java.security.PrivateKey;
 import java.util.concurrent.BlockingQueue;
 
 /**
- *
- * @author servos
+ * A Broadcast class.
+ * 
+ * For each broadcast that is sent or received, there need to be one instance 
+ * of this class to keep track on same variables. 
+ * <p>
+ * Init. broadcast with the Config class.
+ * 
+ * @author Petter Tomner
+ * 
  */
 
 public class Broadcast{

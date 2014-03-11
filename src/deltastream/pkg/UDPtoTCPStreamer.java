@@ -18,6 +18,10 @@ public class UDPtoTCPStreamer {
         static DatagramSocket serverSocket;
         static Socket socketOut;
     
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args){
         
         for(;;){

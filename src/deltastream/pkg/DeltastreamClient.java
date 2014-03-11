@@ -18,8 +18,16 @@ import java.security.*;
  */
 public class DeltastreamClient {
     //this is a client that receives part from the swarm and puts them together to a generic byte stream
-    public static Config config;
+
+    /**
+     *
+     */
+        public static Config config;
     
+    /**
+     *
+     * @param args
+     */
     public static void main(String args[]){
         config = new Config(args);
         Broadcast broadcast = config.CreateBroadcast();

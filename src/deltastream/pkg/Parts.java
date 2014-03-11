@@ -15,7 +15,7 @@ import java.util.*;
  * @author servos
  */
 //object with all the parts
-class Parts{
+public class Parts{
     long timeOut;//ms before a part should be killed
     //static Part[] allParts;//array of all parts
     Hashtable<Integer,Part> allParts;
@@ -28,7 +28,11 @@ class Parts{
     int nOfParts = 0;
     int maxNOfParts = 200;
     
-    Parts(int nOfParts){
+    /**
+     *
+     * @param nOfParts
+     */
+    public Parts(int nOfParts){
         
         allParts = new Hashtable(500);  
         //arrayOfPartN = new int[nOfParts];
@@ -37,7 +41,12 @@ class Parts{
         //allPartsBitSet.set(0, nOfParts);//create bit array with all 11111111s
         //allPartsBitSetAsByteArray = allPartsBitSet.toByteArray();
     }   
-    synchronized BitSet GetPartsAsBitSet(){ //extremly ugly D:
+
+    /**
+     *
+     * @return
+     */
+    public synchronized BitSet GetPartsAsBitSet(){ //extremly ugly D:
         //TODO only do this when a part is updated ... get allOartsBitSet instead
         BitSet bitSet = new BitSet(allParts.size());//borde ju va största id - minsta ...
         int i = 0;
@@ -49,7 +58,11 @@ class Parts{
         return bitSet;  
     }
     
-    synchronized byte[] GetPartsAsBitSetByteArray(){ //extremly ugly D:
+    /**
+     *
+     * @return
+     */
+    public synchronized byte[] GetPartsAsBitSetByteArray(){ //extremly ugly D:
         
         BitSet bitSet = new BitSet(allParts.size());
         int i = 0;
@@ -62,7 +75,11 @@ class Parts{
         return answer;  
     }
     
-    synchronized void PutPart(Part part){
+    /**
+     *
+     * @param part
+     */
+    synchronized public void PutPart(Part part){
         //put a specific part in the allParts
         try{
             if(part.partN<oldestPartId){//check wether the acuired part is too old
@@ -90,10 +107,13 @@ class Parts{
                 System.out.println("Error in putpart "+ee);
         }
               
-    }      
-    
-    
-    synchronized void Put(byte data[]){
+    }
+
+    /**
+     *
+     * @param data
+     */
+    synchronized public void Put(byte data[]){
         //put part in the oldest part's place
         Part part = new Part(newestPartId++,data);  //
         allParts.put(part.partN, part);             //put the part in the mapping table
@@ -105,19 +125,4 @@ class Parts{
     }    
     
     
-}
-
-//single part 
-class Part{
-    int partN;  //de part number of the part
-    byte[] data; //generic data container
-    long timeCreated;//when the part was created
-    
-    Part(int thisPartN, byte thisData[]){
-        timeCreated = new Date().getTime();
-        partN = thisPartN;
-        data = thisData; 
-    }
-    
- 
 }

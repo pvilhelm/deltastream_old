@@ -1,0 +1,23 @@
+Av Petter Tomner, 2014
+
+"Deltastream" är ett protokoll för att låta en server sprida en generisk dataström
+vidare till flera klienter samtidigt som lasten på servern minimeras genom att samtidigt
+låta varje klient vidarebefodra data till de andra klienterna. 
+
+På detta sätt kan tex. en videoström fördelas från en server till (n) stycken datorer med en 
+(idealfall) samma last som om datan skulle sändas till en klient. 
+
+Implementeringen accepterar både TCP- och UDP-strömmar.
+
+För att sända tex. en videoström kan tex. VLC användas. 
+
+På servern: 
+
+Strömma -> UDP (legacy) -> udp://127.0.0.1:4444  
+
+I klienten kan sedan en VLC spela upp strömmen med: 
+
+Öppna nätverksström -> udp://@127.0.0.1:4444
+
+För en mer ingående beskrivning av exakt hur programmet är uppbyggt, se index.html.
+
