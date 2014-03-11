@@ -15,9 +15,9 @@ import java.security.*;
  * 
  * The UDP-stream source connects to this input. Each UDP datagram is then 
  * stripped of its header and sent together with it's
- * data length as a TCP stream to @see ReadInputStreamUDP.
+ * data length as a TCP stream to {@link ReadInputStreamUDP}.
  * <p>
- * (Ugly workaround solution should be directly implemented in RaedInputStream)
+ * (Ugly workaround solution should be directly implemented in {@link ReadInputStream})
  * (Run this as a separate process or w/e)
  * 
  * @author Petter Tomner 

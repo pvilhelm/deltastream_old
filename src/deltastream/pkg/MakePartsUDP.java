@@ -15,11 +15,11 @@ import java.util.TimerTask;
 /**
  * Makes parts out of a UDP stream buffer.
  * 
- * The piped stream from @see ReadInputStreamUDP is read by this class instance and then made into a part, 
+ * The piped stream from {@link ReadInputStreamUDP} is read by this class instance and then made into a part, 
  * ready to be transmitted to the other clients. 
  * <p>
  * Instances of this class is spawned by a timer at intervals corresponding to 
- * sample time provided by @see Config. 
+ * sample time provided by {@link Config}. 
  * <p>
  * The parts are made in such a way that a UDP datagram is not split up between 
  * two parts.

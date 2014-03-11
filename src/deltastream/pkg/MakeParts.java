@@ -18,7 +18,7 @@ import java.util.TimerTask;
  * ready to be transmitted to the other clients. 
  * <p>
  * Instances of this class is spawned by a timer at intervals corresponding to 
- * sample time provided by @see Config. 
+ * sample time provided by {@link Config}. 
  * 
  * @author Petter Tomner
  * 

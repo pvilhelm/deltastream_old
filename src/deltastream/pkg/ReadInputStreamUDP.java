@@ -21,7 +21,7 @@ import java.util.TimerTask;
 /**
  * Reads the TCP-FORWARDED UDP input stream on the server.
  * 
- * Then sends the stream through a pipe @see MakePartsUDP, which makes parts of the
+ * Then sends the stream through a pipe {@link MakePartsUDP}, which makes parts of the
  * stream at a specified time interval. 
  * 
  * @author Petter Tomner 
