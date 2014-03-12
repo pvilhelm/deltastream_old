@@ -39,8 +39,8 @@ class OutputStreamServerUDP implements Runnable{
  
         for(;;){//listen for incoming output socket request    
             try{
-            serverSocket = new DatagramSocket();
-            System.out.println("Will sen output UDP stream from local port:"+serverSocket.getLocalPort());
+                serverSocket = new DatagramSocket();
+                System.out.println("Will sen output UDP stream from local port:"+serverSocket.getLocalPort());
             }
             catch(Exception ee){
                 System.out.println("Coulnt create output server socket"+ee);
@@ -52,18 +52,9 @@ class OutputStreamServerUDP implements Runnable{
             byte[] buffer = new byte[65535];
             int partToGet = broadcast.parts.oldestPartId+50;
             Date errorN = new Date();
-            for(;;){//TODO add support for moar outputs and not only to 127.0.0.1
-                synchronized(broadcast.parts.newPartLock){
-                    while(!broadcast.parts.newPartLock.existNew){
-                        try{
-                            broadcast.parts.newPartLock.wait();    
-                        }
-                        catch(Exception ee){
-                            System.out.println("Exception: Couldnt wait for new part lock"+ee);
-                        }
-                    }
-                    broadcast.parts.newPartLock.existNew = false;
-                }
+            for(;;){ 
+                
+                
                 
                 if(partToGet <= broadcast.parts.oldestPartId+50){
                     
@@ -92,6 +83,20 @@ class OutputStreamServerUDP implements Runnable{
                         }
                         partToGet++;
                     }
+                }
+                else{//if we dont have a new enough part, wait for another one
+                    synchronized(broadcast.parts.newPartLock){ //this makes sure we only test conditions while we have a new part
+                    while(!broadcast.parts.newPartLock.existNew){
+                        try{
+                            broadcast.parts.newPartLock.wait();    
+                        }
+                        catch(Exception ee){
+                            System.out.println("Exception: Couldnt wait for new part lock"+ee);
+                        }
+                    }
+                    broadcast.parts.newPartLock.existNew = false;
+                }
+                    
                 }
                 if(errorN.getTime()+5000<(new Date()).getTime()){
                     errorN = new Date();

@@ -6,7 +6,7 @@
 
 package deltastream.pkg;
 
-import static deltastream.pkg.UDPtoTCPStreamer.serverSocket;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
@@ -14,7 +14,7 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.net.DatagramPacket;
+import java.net.*;
 import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -32,7 +32,7 @@ import java.util.TimerTask;
 
 public class ReadInputStreamUDP implements Runnable{
     //här ska instreamen samplas ... 
-    
+    DatagramSocket serverSocket;
     Broadcast broadcast;
     /**
      * 
@@ -56,6 +56,7 @@ public class ReadInputStreamUDP implements Runnable{
             try{      
                 serverSocket = new DatagramSocket(Config.inputStreamPort);
                 serverSocket.setReceiveBufferSize(100000);
+                System.out.println("Waiting for Inpout Stream on local port"+Config.inputStreamPort);
             }
             catch(Exception ee){
                 System.out.println("Couln't accept inpu udp stream connection: " + ee);

@@ -22,6 +22,8 @@ import java.security.*;
  * 
  * @author Petter Tomner 
  */
+
+/*
 public class UDPtoTCPStreamer {
         static DatagramSocket serverSocket;
         static Socket socketOut;
@@ -29,7 +31,7 @@ public class UDPtoTCPStreamer {
     /**
      *
      * @param args
-     */
+     *
     public void UDPtoTCPStreamer(){
         
         for(;;){
@@ -37,7 +39,7 @@ public class UDPtoTCPStreamer {
 
                 serverSocket = new DatagramSocket(5555);
                 //DatagramSocket outSocket = new DatagramSocket(4321);
-                socketOut = new Socket("127.0.0.1",1081); //open socket to deltastream server
+                socketOut = new Socket("127.0.0.1",Config.); //open socket to deltastream server
 
                 //SocketAddress remoteAddr =new InetSocketAddress("127.0.0.1",4321);
                 BufferedOutputStream outputStream = new BufferedOutputStream(socketOut.getOutputStream());
@@ -76,3 +78,4 @@ public class UDPtoTCPStreamer {
     }
     
 }
+*/

@@ -48,11 +48,6 @@ public class Config {
     /**
      *
      */
-    public static int clientDLUPServerSocketPort = 1083;   //the port for generic com with clients
-
-    /**
-     *
-     */
     public static int genericStreamBufferSize = 1000000; //the buffer size in bytes for some streams
 
     /**
