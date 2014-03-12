@@ -75,6 +75,12 @@ public class Config {
      */
     public static String remoteUDPOutputStreamIP = "127.0.0.1";
     
+    /**
+     * 
+     */
+    
+    public static double UDPBroadcastWaitCoeff = 0.8;
+    
     Config(String[] args){
         //arguments go here TODO
     }

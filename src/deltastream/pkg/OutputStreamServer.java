@@ -49,7 +49,8 @@ class OutputStreamServerUDP implements Runnable{
             System.out.println("Sending Output UDP data to remote port:"+Config.remoteUDPOutputStreamPort+" at IP:"+Config.remoteUDPOutputStreamIP);
             
             
-            byte[] buffer = new byte[65535];
+            byte[] buffer = new byte[15000000];
+            int[] datagramL = new int[10000];
             int partToGet = broadcast.parts.oldestPartId+50;
             Date errorN = new Date();
             for(;;){ 
@@ -68,13 +69,29 @@ class OutputStreamServerUDP implements Runnable{
                         DataInputStream dataInStream = new DataInputStream(bAInputStream);
                         Object object = new Object();
                         
-                        try{
+                        try{ //TODO make the protocoll make the udp stream perfect identical timing
+                            int datagramCount = 0;
+                            int readBytes = 0; 
                             while(bAInputStream.available()!=0){
-                                int datagramL = dataInStream.readUnsignedShort();
-                                bAInputStream.read(buffer,0,datagramL);
-                                DatagramPacket packet = new DatagramPacket(buffer,0,datagramL); 
+                                datagramL[datagramCount] = dataInStream.readUnsignedShort();
+                                readBytes += bAInputStream.read(buffer,readBytes,datagramL[datagramCount]);
+                                datagramCount++;
+                            }
+                            
+                            int waitMs = (int) (Config.UDPBroadcastWaitCoeff*(double)Config.SamplingPeriod/(double)datagramCount);
+                            
+                            readBytes = 0;
+                            for(int i = 0; i<datagramCount;i++){
+                                DatagramPacket packet = new DatagramPacket(buffer,readBytes,datagramL[i]); 
+                                readBytes += datagramL[i];
                                 packet.setSocketAddress(remoteAddr);
                                 serverSocket.send(packet);
+                                try{
+                                    Thread.sleep(waitMs);
+                                }
+                                catch(Exception ee){
+                                    System.out.println("Coudlnt wait the specified amount of ms in UDP stream output"+ee);
+                                }
                             }
                         }
                         catch(Exception ee){
