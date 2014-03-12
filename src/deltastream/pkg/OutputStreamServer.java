@@ -51,23 +51,29 @@ class OutputStreamServerUDP implements Runnable{
             
             byte[] buffer = new byte[15000000];
             int[] datagramL = new int[10000];
-            int partToGet = broadcast.parts.oldestPartId+50;
+            int partToGet = broadcast.parts.oldestPartId+90;
             Date errorN = new Date();
+            Date old = new Date();
+            Date neew = new Date();
+            long lastSentPart = System.currentTimeMillis(); // old current time
+            long currentTimeMs = System.currentTimeMillis(); //current time
+            Part oldPart = new Part(-1,null); //pointer to the prior sent part
+            Part part = new Part(-1,null);
             for(;;){ 
                 
                 
                 
-                if(partToGet <= broadcast.parts.oldestPartId+50){
+                if(partToGet <= broadcast.parts.oldestPartId+90){
                     
                     
                     
                     if(broadcast.parts.allParts.containsKey(partToGet)){                                        
                         errorN = new Date();
                         
-                        Part part = broadcast.parts.allParts.get(partToGet);
+                        oldPart = part; 
+                        part = broadcast.parts.allParts.get(partToGet);
                         ByteArrayInputStream bAInputStream = new ByteArrayInputStream(part.data);
                         DataInputStream dataInStream = new DataInputStream(bAInputStream);
-                        
                         
                         try{ //TODO make the protocoll make the udp stream perfect identical timing
                             int datagramCount = 0;
@@ -93,12 +99,29 @@ class OutputStreamServerUDP implements Runnable{
                                     System.out.println("Coudlnt wait the specified amount of ms in UDP stream output"+ee);
                                 }
                             }
+                            partToGet++;
+                            System.out.println(old.getTime()-neew.getTime()+" "+readBytes);
+                            if(old.getTime()-neew.getTime()<800)
+                                    old=old;//dummy instruction 
+                            old = neew;
+                            neew = new Date();
+                            
+                            currentTimeMs = System.currentTimeMillis();
+                            long sendTime = currentTimeMs - lastSentPart; 
+                            long originalCreationTimeSpan = part.timeCreated -oldPart.timeCreated;
+                            long diff = originalCreationTimeSpan - sendTime; 
+                            
+                            if(diff>0 && diff< broadcast.samplingPeriod*3){
+                                Thread.sleep(diff+1); //sleeping to make sure we dont "catch up" with the parts
+                            }
+                                
+                            
                         }
                         catch(Exception ee){
                             System.out.println("Couldnt write to output. "+ee.toString());
                             break;
                         }
-                        partToGet++;
+                        
                     }
                 }
                 else{//if we dont have a new enough part, wait for another one
@@ -117,7 +140,7 @@ class OutputStreamServerUDP implements Runnable{
                 }
                 if(errorN.getTime()+5000<(new Date()).getTime()){
                     errorN = new Date();
-                    partToGet = broadcast.parts.oldestPartId+50;//nollställer
+                    partToGet = broadcast.parts.oldestPartId+90;//nollställer
                     System.out.println("Resetting output stream part number to:"+partToGet);
                 }                            
             }
