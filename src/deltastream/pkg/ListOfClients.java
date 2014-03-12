@@ -336,7 +336,8 @@ public class ListOfClients{
                 System.out.println("Part doesnt exist:" +partNr);
                 return;
             }
-            int partN; long timeCreated;
+            int partN; 
+            long timeCreated;
             byte[] dataCopy;
             
             synchronized(partUl){//reads the data so it wont block remove

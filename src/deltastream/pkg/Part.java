@@ -6,8 +6,6 @@
 
 package deltastream.pkg;
 
-import java.util.Date;
-
 /**
  * A part of data sampled from the input stream at the source.
  * 
@@ -27,7 +25,7 @@ public class Part{
      * @param thisData the data the part carries
      */
     public Part(int thisPartN, byte thisData[]){
-        timeCreated = new Date().getTime();
+        timeCreated = System.currentTimeMillis();
         partN = thisPartN;
         data = thisData; 
     }
