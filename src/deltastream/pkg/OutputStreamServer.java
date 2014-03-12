@@ -67,7 +67,7 @@ class OutputStreamServerUDP implements Runnable{
                         Part part = broadcast.parts.allParts.get(partToGet);
                         ByteArrayInputStream bAInputStream = new ByteArrayInputStream(part.data);
                         DataInputStream dataInStream = new DataInputStream(bAInputStream);
-                        Object object = new Object();
+                        
                         
                         try{ //TODO make the protocoll make the udp stream perfect identical timing
                             int datagramCount = 0;
