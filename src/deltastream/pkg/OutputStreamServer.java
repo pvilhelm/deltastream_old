@@ -40,27 +40,42 @@ class OutputStreamServerUDP implements Runnable{
         for(;;){//listen for incoming output socket request    
             try{
             serverSocket = new DatagramSocket();
-            System.out.println("Will sen output UDP stream from port:"+Config.localUDPOutputStreamPort);
+            System.out.println("Will sen output UDP stream from local port:"+serverSocket.getLocalPort());
             }
             catch(Exception ee){
                 System.out.println("Coulnt create output server socket"+ee);
             }
             SocketAddress remoteAddr = new InetSocketAddress(Config.remoteUDPOutputStreamIP,Config.remoteUDPOutputStreamPort);
-            System.out.println("Sending Output UDP data to port:"+Config.remoteUDPOutputStreamPort+" at IP:"+Config.remoteUDPOutputStreamIP);
+            System.out.println("Sending Output UDP data to remote port:"+Config.remoteUDPOutputStreamPort+" at IP:"+Config.remoteUDPOutputStreamIP);
             
             
             byte[] buffer = new byte[65535];
             int partToGet = broadcast.parts.oldestPartId+50;
             Date errorN = new Date();
             for(;;){//TODO add support for moar outputs and not only to 127.0.0.1
+                synchronized(broadcast.parts.newPartLock){
+                    while(!broadcast.parts.newPartLock.existNew){
+                        try{
+                            broadcast.parts.newPartLock.wait();    
+                        }
+                        catch(Exception ee){
+                            System.out.println("Exception: Couldnt wait for new part lock"+ee);
+                        }
+                    }
+                    broadcast.parts.newPartLock.existNew = false;
+                }
                 
                 if(partToGet <= broadcast.parts.oldestPartId+50){
+                    
+                    
+                    
                     if(broadcast.parts.allParts.containsKey(partToGet)){                                        
                         errorN = new Date();
                         
                         Part part = broadcast.parts.allParts.get(partToGet);
                         ByteArrayInputStream bAInputStream = new ByteArrayInputStream(part.data);
                         DataInputStream dataInStream = new DataInputStream(bAInputStream);
+                        Object object = new Object();
                         
                         try{
                             while(bAInputStream.available()!=0){

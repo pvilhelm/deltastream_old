@@ -19,6 +19,14 @@ import java.util.*;
  */
 //object with all the parts
 public class Parts{
+    
+    class NewPartLock{
+        boolean existNew;
+        NewPartLock(){
+            this.existNew = true; 
+        }
+    }
+    
     long timeOut;//ms before a part should be killed
     //static Part[] allParts;//array of all parts
     Hashtable<Integer,Part> allParts;
@@ -30,7 +38,7 @@ public class Parts{
     int oldestPartId = 1;
     int nOfParts = 0;
     int maxNOfParts = 200;
-    
+    NewPartLock newPartLock;
     /**
      *
      * a hashtable of default length is created
@@ -38,11 +46,7 @@ public class Parts{
     public Parts(){
         
         allParts = new Hashtable(500);  
-        //arrayOfPartN = new int[nOfParts];
-        
-        //allPartsBitSet = new BitSet(nOfParts);
-        //allPartsBitSet.set(0, nOfParts);//create bit array with all 11111111s
-        //allPartsBitSetAsByteArray = allPartsBitSet.toByteArray();
+        newPartLock = new NewPartLock();   
     }   
 
     /**
@@ -65,6 +69,8 @@ public class Parts{
      *
      * @return
      */
+    
+    
     public synchronized byte[] GetPartsAsBitSetByteArray(){ //extremly ugly D:
         
         BitSet bitSet = new BitSet(allParts.size());
@@ -103,7 +109,10 @@ public class Parts{
                 //oldestPartId++;    //new oldest part
                 nOfParts--;        //remove one from count  
             }
-            
+            synchronized(this.newPartLock){
+                this.newPartLock.existNew = true;
+                this.newPartLock.notify();
+            }
             
         }
         catch(Exception ee){
@@ -120,12 +129,16 @@ public class Parts{
         //put part in the oldest part's place
         Part part = new Part(newestPartId++,data);  //
         allParts.put(part.partN, part);             //put the part in the mapping table
-        if(++nOfParts>maxNOfParts)                  //remove the oldest part if buffer is full
+        if(++nOfParts>maxNOfParts){                  //remove the oldest part if buffer is full
             synchronized(allParts.get(oldestPartId)){
                 allParts.remove(oldestPartId++);
-            }
-          
+            }}
+        synchronized(this.newPartLock){
+            this.newPartLock.existNew = true;
+            this.newPartLock.notify();
+        } 
     }    
     
     
 }
+
