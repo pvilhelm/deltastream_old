@@ -91,6 +91,8 @@ public class ListOfClients{
         Date lastPartAquiredFromClient;
         Date lastKeyRqSentToClient;
         Date lastTriedToConnetcTo;
+        Date neew;//TODO remove
+        Date old;
         BitSet bitFieldParts;
         int partIdOffset;
         Broadcast broadcast; //the broadcast the client belongs to
@@ -117,6 +119,9 @@ public class ListOfClients{
             uploadQue = new LinkedBlockingQueue(100);
             lastBitSet = new Date(0);
             clientSessionId = rand.nextInt();
+            neew=new Date();
+            old = new Date();
+            
             
         }
         
@@ -356,6 +361,10 @@ public class ListOfClients{
                 //sign here
                 OS.write(dataCopy);
                 outData.flush();
+                long tmp = neew.getTime()-old.getTime();
+                old = neew;
+                neew = new Date();
+                System.out.println("Sent part "+partN+" at "+tmp);
                 //System.out.println("Sent part: " + partN);
             }
             catch(Exception ee){
@@ -371,7 +380,7 @@ public class ListOfClients{
         /**
          *
          */
-        public synchronized void SendKey(){
+        public void SendKey(){
             DataOutputStream OSData = new DataOutputStream(OS);
             try{
                 OSData.writeLong(broadcast.broadcastId);
