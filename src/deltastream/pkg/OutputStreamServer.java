@@ -62,9 +62,9 @@ class OutputStreamServerUDP implements Runnable{
             for(;;){ 
                 
                 
-                
-                if(partToGet <= broadcast.parts.oldestPartId+90){
-                    
+                if(oldPart.timeCreated+10000<System.currentTimeMillis()){
+                //if(partToGet <= broadcast.parts.oldestPartId+90){
+             //       
                     
                     
                     if(broadcast.parts.allParts.containsKey(partToGet)){                                        
@@ -93,28 +93,32 @@ class OutputStreamServerUDP implements Runnable{
                                 packet.setSocketAddress(remoteAddr);
                                 serverSocket.send(packet);
                                 try{
-                                    Thread.sleep(waitMs);
+                                    //Thread.sleep(waitMs);
                                 }
                                 catch(Exception ee){
                                     System.out.println("Coudlnt wait the specified amount of ms in UDP stream output"+ee);
                                 }
                             }
                             partToGet++;
-                            System.out.println(old.getTime()-neew.getTime()+" "+readBytes);
-                            if(old.getTime()-neew.getTime()<800)
+                            if(old.getTime()-neew.getTime()<-800)
                                     old=old;//dummy instruction 
-                            old = neew;
-                            neew = new Date();
+                            
                             
                             currentTimeMs = System.currentTimeMillis();
                             long sendTime = currentTimeMs - lastSentPart; 
+                            lastSentPart = currentTimeMs; 
                             long originalCreationTimeSpan = part.timeCreated -oldPart.timeCreated;
-                            long diff = originalCreationTimeSpan - sendTime; 
+                            long diff = originalCreationTimeSpan - sendTime;
                             
+                            
+                            old = neew;
+                            neew = new Date();
+                                                        
                             if(diff>0 && diff< broadcast.samplingPeriod*3){
-                                Thread.sleep(diff+1); //sleeping to make sure we dont "catch up" with the parts
+                                Thread.sleep(diff); //sleeping to make sure we dont "catch up" with the parts
                             }
-                                
+                            System.out.println((old.getTime()-(new Date()).getTime()) + " " +(old.getTime()-neew.getTime())+" : "+originalCreationTimeSpan+" read bytes: "+readBytes+" partNr"+part.partN+" diff part to newest"+(broadcast.parts.oldestPartId-part.partN));
+  
                             
                         }
                         catch(Exception ee){
@@ -124,7 +128,7 @@ class OutputStreamServerUDP implements Runnable{
                         
                     }
                 }
-                else{//if we dont have a new enough part, wait for another one
+                /*else{//if we dont have a new enough part, wait for another one
                     synchronized(broadcast.parts.newPartLock){ //this makes sure we only test conditions while we have a new part
                     while(!broadcast.parts.newPartLock.existNew){
                         try{
@@ -137,7 +141,7 @@ class OutputStreamServerUDP implements Runnable{
                     broadcast.parts.newPartLock.existNew = false;
                 }
                     
-                }
+                }*/
                 if(errorN.getTime()+5000<(new Date()).getTime()){
                     errorN = new Date();
                     partToGet = broadcast.parts.oldestPartId+90;//nollställer

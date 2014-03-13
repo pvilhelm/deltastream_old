@@ -17,7 +17,7 @@ import java.net.Socket;
  * 
  * Each TCP connection to the local instance of this program spawn one 
  * ClientDownLoadHandler thread. The thread might be closed with out 
- * removing the client from the clientlist.  
+ * removing the client from the client list.  
  * 
  * @author Petter Tomner
  */
@@ -78,10 +78,10 @@ public class ClientDownloadHandler implements Runnable{
             switch(type){
                 case 'p': //incoming part
                     try{
-                        ISData.readLong();
+                        long broadcastID = ISData.readLong();
                         ISData.readByte();
                         partN = ISData.readInt();
-                        ISData.readLong();
+                        long creationTime = ISData.readLong();
                         int dataLength = ISData.readInt();
                         data = new byte[dataLength];
                         int nReadBytes = 0;
@@ -91,6 +91,9 @@ public class ClientDownloadHandler implements Runnable{
                             System.out.println("Couldnt read all bytes of part");//TODO error management
                         //System.out.println("Acuired part "+partN);
                         Part part = new Part(partN, data); //TODO check signature
+                        part.timeCreated = creationTime;
+                        
+                        //TODO add check for broadcast id and signature
                         broadcast.parts.PutPart(part);
                         client.downloadedParts++;
                         broadcast.requestedParts.remove(partN);
