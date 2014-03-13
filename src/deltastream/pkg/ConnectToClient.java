@@ -47,6 +47,7 @@ public class ConnectToClient implements Runnable{
                 try{
                     Socket socket =  new Socket(client.IP,Config.clientServerSocketPort);
                     client.socket = socket;
+                    socket.setReceiveBufferSize(1000000);
                     client.OS = new BufferedOutputStream(socket.getOutputStream());
                     client.IS = new BufferedInputStream(socket.getInputStream());
                     client.socket.setSoTimeout(0);//TODO remeber to remove/set lower
