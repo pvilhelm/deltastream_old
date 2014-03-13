@@ -188,9 +188,6 @@ public class ClientDownloadHandler implements Runnable{
                     return;//TODO REMOVE CLIENT CONNECNTIOn
                     //break;
             } 
-            
-            
-            //TODO add check for closing thread 
         }
     } 
 }

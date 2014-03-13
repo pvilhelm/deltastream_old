@@ -100,13 +100,6 @@ public class MakePartsUDP extends TimerTask{
             System.out.println("Couldnt read buffer in making parts");
         }
         broadcast.parts.Put(bAOutputStream.toByteArray());
-        
-        /*try{
-            System.out.println(buffer[0] +" "+ nrOfBytes);
-        }
-        catch(Exception ee){
-            ;
-        }*/
     }
 }
 

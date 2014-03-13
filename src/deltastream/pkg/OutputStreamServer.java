@@ -40,6 +40,7 @@ class OutputStreamServerUDP implements Runnable{
         for(;;){//listen for incoming output socket request    
             try{
                 serverSocket = new DatagramSocket();
+                
                 System.out.println("Will sen output UDP stream from local port:"+serverSocket.getLocalPort());
             }
             catch(Exception ee){
@@ -61,10 +62,18 @@ class OutputStreamServerUDP implements Runnable{
             Part part = new Part(-1,null);
             for(;;){ 
                 
+                long tmp = oldPart.timeCreated+10000-System.currentTimeMillis();
+                try{
+                    if(tmp>0)
+                        Thread.sleep(tmp);
+                }
+                catch(Exception ee){
+                    System.out.println("couldnt pause"+ee+"67");
+                }
                 
                 if(oldPart.timeCreated+10000<System.currentTimeMillis()){
                 //if(partToGet <= broadcast.parts.oldestPartId+90){
-             //       
+               
                     
                     
                     if(broadcast.parts.allParts.containsKey(partToGet)){                                        
@@ -92,6 +101,7 @@ class OutputStreamServerUDP implements Runnable{
                                 readBytes += datagramL[i];
                                 packet.setSocketAddress(remoteAddr);
                                 serverSocket.send(packet);
+                                
                                 try{
                                     //Thread.sleep(waitMs);
                                 }
@@ -114,7 +124,7 @@ class OutputStreamServerUDP implements Runnable{
                             old = neew;
                             neew = new Date();
                                                         
-                            if(diff>0 && diff< broadcast.samplingPeriod*3){
+                            if(diff>0 && diff < broadcast.samplingPeriod*3){
                                 Thread.sleep(diff); //sleeping to make sure we dont "catch up" with the parts
                             }
                             System.out.println((old.getTime()-(new Date()).getTime()) + " " +(old.getTime()-neew.getTime())+" : "+originalCreationTimeSpan+" read bytes: "+readBytes+" partNr"+part.partN+" diff part to newest"+(broadcast.parts.oldestPartId-part.partN));
@@ -127,21 +137,20 @@ class OutputStreamServerUDP implements Runnable{
                         }
                         
                     }
-                }
-                /*else{//if we dont have a new enough part, wait for another one
-                    synchronized(broadcast.parts.newPartLock){ //this makes sure we only test conditions while we have a new part
-                    while(!broadcast.parts.newPartLock.existNew){
-                        try{
-                            broadcast.parts.newPartLock.wait();    
-                        }
-                        catch(Exception ee){
-                            System.out.println("Exception: Couldnt wait for new part lock"+ee);
+                    else{//if we dont have a new enough part, wait for another one
+                        synchronized(broadcast.parts.newPartLock){ //this makes sure we only test conditions while we have a new part
+                            while(!broadcast.parts.newPartLock.existNew){
+                                try{
+                                    broadcast.parts.newPartLock.wait();    
+                                }
+                                catch(Exception ee){
+                                    System.out.println("Exception: Couldnt wait for new part lock"+ee);
+                                }
+                            }
+                            broadcast.parts.newPartLock.existNew = false;
                         }
                     }
-                    broadcast.parts.newPartLock.existNew = false;
                 }
-                    
-                }*/
                 if(errorN.getTime()+5000<(new Date()).getTime()){
                     errorN = new Date();
                     partToGet = broadcast.parts.oldestPartId+90;//nollställer
