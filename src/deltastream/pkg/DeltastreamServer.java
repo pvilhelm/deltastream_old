@@ -87,7 +87,7 @@ public class DeltastreamServer{
                 clientSocket = clientServerS.accept();
                 System.out.println("Client accepted from IP: " + clientSocket.getInetAddress() 
                         +" at port: " +clientSocket.getLocalPort()+" to port: "+clientSocket.getPort());
-                clientSocket.setSendBufferSize(1000);
+                clientSocket.setSendBufferSize(1000000);
                 clientSocket.setReceiveBufferSize(1000000);
                 clientSocket.setSoTimeout(0); ///<--remeber to remove
             }
