@@ -133,16 +133,16 @@ public class ClientDownloadHandler implements Runnable{
                     break;
                 case 'x'://do I want this part?
                     try{
-                        ISData.readLong();
-                        ISData.readByte();
-                        partN = ISData.readInt(); /// TODO <------------------ kom ihåg lägga in check här!!
-                        //System.out.println("Read part offer "+partN);
+                        client.GetListOfParts();
+                        
                     }
                     catch(Exception ee){
                         System.out.println("Couldnt read what part client wants"+ee);
                         client.Drop();
                         return;
                     }
+                    partN = client.PickPartINeed();// TODO this shouldnt pick allready requested parts
+                    
                     if(!broadcast.parts.allParts.containsKey(partN) && !broadcast.requestedParts.contains(partN)){ //TODO or is downloading that part
                             client.PutUlQue('c', partN);
                             broadcast.requestedParts.offer(partN);

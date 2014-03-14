@@ -250,12 +250,21 @@ public class ListOfClients{
             //check if the client wants the part        
             DataOutputStream outData = new DataOutputStream(OS);
             try{
+                int oldestPart; byte[] allPartsBitSetAsByteArray;
+                synchronized(broadcast.parts){ 
+                     oldestPart = broadcast.parts.oldestPartId; 
+                     allPartsBitSetAsByteArray = broadcast.parts.GetPartsAsBitSetByteArray();
+                }
                 outData.writeLong(broadcast.broadcastId); //writes broadcast ID
                 outData.writeByte('x');//type of message
-                outData.writeInt(PartN);
+                outData.writeInt(oldestPart);//sends offset
+                outData.writeShort(allPartsBitSetAsByteArray.length);//sends length of bitbytearray as short
+                //OS.write(allPartsBitSetAsByteArray,0,allPartsBitSetAsByteArray.length);
+                outData.write(allPartsBitSetAsByteArray);
                 outData.flush();
-                //System.out.println("Ask if he wants part: "+PartN);
                 lastPartListRequested = new Date();
+                //System.out.println("Ask if he wants part: "+PartN);
+                 
             }
             
             catch(Exception ee){
@@ -263,7 +272,52 @@ public class ListOfClients{
                 this.Drop();
             }
         }
-        
+        public int PickPartINeed(){
+            int myOldestPartId;
+            int myNewestPartId;
+            BitSet myPartsBitSet;
+            synchronized(broadcast.parts){
+                myOldestPartId = broadcast.parts.oldestPartId;
+                myNewestPartId = broadcast.parts.newestPartId;
+                myPartsBitSet = broadcast.parts.GetPartsAsBitSet();
+            }
+            /////
+            int diff;
+            synchronized(bitFieldParts){
+                diff = myOldestPartId-partIdOffset;
+                 
+                
+                if(diff>=0){
+                    for(int i=0;i<bitFieldParts.length()-diff;i++){
+                        if(!((myPartsBitSet.get(i) ^ bitFieldParts.get(i+diff)) & bitFieldParts.get(i+diff)))
+                            myPartsBitSet.clear(i); 
+                    } 
+
+                }
+                else{
+                   myPartsBitSet.clear(0, diff);
+
+                   for(int i=0;i<myPartsBitSet.length()-diff;i++){
+                        if(!((myPartsBitSet.get(i+diff) ^ bitFieldParts.get(i)) & bitFieldParts.get(i)))
+                            myPartsBitSet.clear(i+diff);  
+                    }    
+                }
+            }
+            int offset=0;
+            if(diff<0)
+                offset = diff;
+            
+            int indexRand = rand.nextInt(myNewestPartId-myOldestPartId-offset)+offset;
+            
+            int partNrRnd = myPartsBitSet.previousSetBit(indexRand);
+            if(partNrRnd==-1)
+                partNrRnd = myPartsBitSet.nextSetBit(indexRand);
+            if(partNrRnd==-1)
+                return -1;
+            return partNrRnd+myOldestPartId;
+            
+            
+        }
         /**
          *
          * @return
@@ -273,7 +327,7 @@ public class ListOfClients{
             // TODO - the wighting ... later parts should be wieghted
             // TODO - this should be redone ... so that prior to each part exchange
             //there always be a trading of partsliost
-            int nBits = bitFieldParts.length();
+            
             int myOldestPartId;
             int myNewestPartId;
             BitSet myPartsBitSet;
@@ -318,6 +372,8 @@ public class ListOfClients{
             int partNrRnd = myPartsBitSet.previousSetBit(indexRand);
             if(partNrRnd==-1)
                 partNrRnd = myPartsBitSet.nextSetBit(indexRand);
+            if(partNrRnd==-1)
+                return -1;
             return partNrRnd+myOldestPartId;
         }
         
@@ -432,29 +488,6 @@ public class ListOfClients{
             }
             UpdateLastContact();
         }
-        
-        /*void CreateGenConnTCP(){ //creates a tcp connection on general port with clietn
-            try{
-                Socket socket = new Socket(IP,broadcast.config.clientServerSocketPort);
-                IS = new BufferedInputStream(socket.getInputStream());
-                OS = new BufferedOutputStream(socket.getOutputStream());
-                System.out.println("Connected to "+socket.getInetAddress().getHostAddress()+" at local port: "+socket.getLocalPort()+"to remote port:"+socket.getPort());
-                socket.setSoTimeout(0); ///<--remeber to remove
-            }
-            catch(Exception ee){
-                System.out.println("Couldnt create TCP connection with client"+ee.toString());
-            }               
-        }*/
-        
-        /*void CloseGenConnTCP(){
-            try{
-            IS.close();
-            //OS.close();
-            }
-            catch(Exception ee){
-                System.out.println("Coudlnt close socekts"+ee);
-            }
-        }*/
 
         /**
          *

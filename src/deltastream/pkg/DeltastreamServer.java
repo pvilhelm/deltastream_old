@@ -106,8 +106,6 @@ public class DeltastreamServer{
                 }
             client.socket = clientSocket; 
             }
-            
-            
             //creates thread for handling the client
             if(client.ulThread==null || !client.ulThread.isAlive()){
                 synchronized(client){
