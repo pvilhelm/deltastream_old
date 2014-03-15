@@ -49,10 +49,14 @@ public class UploadHandler implements Runnable{
                 clientToUploadTo = broadcast.listOfClients.PickClientForUpload();
             }
             catch(Exception ee){
+                System.out.println("Errerer "+ee);
                 continue;
             }
-            if(clientToUploadTo==null)
+            if(clientToUploadTo==null){
+                System.out.println("ClientToupload to null");
                 continue;
+            }
+                 
             
             if(!clientToUploadTo.connected && (clientToUploadTo.lastTriedToConnetcTo.getTime()+2000<(new Date()).getTime())){
                 if(clientToUploadTo.ulThread==null || !clientToUploadTo.ulThread.isAlive()){ //check if a upload thread is alive or make on
@@ -68,24 +72,11 @@ public class UploadHandler implements Runnable{
             
             if(clientToUploadTo.uploadQue.size()>12) // TODO <------------- make this changeable from config
                 continue;
-
             
-            long time = new Date().getTime();
-            if(clientToUploadTo.lastBitSet.getTime()+5000< time){
-                if(!clientToUploadTo.uploadQue.contains(113) && (clientToUploadTo.lastPartListRequested.getTime() + 2000 < time))
-                    clientToUploadTo.PutUlQue('q'); //TODO if it doenst put in queue, dont do rest!!!
+            if(clientToUploadTo.lastSentPartQ.getTime()+50>(new Date()).getTime()) //TODO add pending w8 instead
+                continue; 
                 
-                continue;
-            }
-            //pick random part it needs
-
-            int partToUploadNr= clientToUploadTo.PickPartItNeeds();
-            if(partToUploadNr==-1)
-                continue;
-            
-            
-                
-            clientToUploadTo.PutUlQue('x',partToUploadNr); 
+            clientToUploadTo.PutUlQue('x',0); 
         }
     }
 }   

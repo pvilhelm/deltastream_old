@@ -76,7 +76,7 @@ public class ClientUploadHandler implements Runnable{
                      partNr = client.TakeUlQue();
                      if(partNr==-1)
                          break;//TODO some errror managment
-                     client.AskSendPart(partNr);
+                     client.AskSendPart( );
                      break;
                  case 'q'://q = ask which parts a node has
                      client.SendListOfParts('q');

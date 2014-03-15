@@ -50,9 +50,9 @@ public class DeltastreamClient {
         timer2.schedule(new CleanRqList(broadcast), 5000, 5000);//
         
         //init upload handler
-        /*UploadHandler uploadHandler = new UploadHandler(broadcast);
+        UploadHandler uploadHandler = new UploadHandler(broadcast);
         Thread uploadHandlerThread = new Thread(uploadHandler,"Upload Handler");
-        uploadHandlerThread.start();*/
+        uploadHandlerThread.start();
         
         ListOfClients.Client client2 = broadcast.listOfClients.AddClient("85.24.167.217");
         Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");

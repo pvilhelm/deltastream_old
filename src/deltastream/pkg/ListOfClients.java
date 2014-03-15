@@ -86,6 +86,7 @@ public class ListOfClients{
         Date firstContact;
         Date lastContact;
         Date lastBitSet;
+        Date lastSentPartQ;
         Date lastPartListRequested;
         Date lastPartSentToClient;
         Date lastPartAquiredFromClient;
@@ -121,7 +122,7 @@ public class ListOfClients{
             clientSessionId = rand.nextInt();
             neew=new Date();
             old = new Date();
-            
+            lastSentPartQ = new Date();
             
         }
         
@@ -246,7 +247,7 @@ public class ListOfClients{
          *
          * @param PartN
          */
-        public void AskSendPart(int PartN){
+        public void AskSendPart(){
             //check if the client wants the part        
             DataOutputStream outData = new DataOutputStream(OS);
             try{
