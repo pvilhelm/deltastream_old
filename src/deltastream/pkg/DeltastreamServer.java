@@ -22,7 +22,7 @@ import java.security.*;
  * @author Petter Tomner
  */
 
-public class DeltastreamServer{
+public class DeltastreamServer implements Runnable{
 
     /**
      *
@@ -33,9 +33,9 @@ public class DeltastreamServer{
      *
      * @param args
      */
-    public static void main(String[] args) {
+    public void run() {
         // TODO code application logic here
-        config = new Config(args);
+        config = new Config(null);
         Broadcast broadcast = config.CreateBroadcast(); //creates a broadcast object from the config
         broadcast.config = config;
 

@@ -20,7 +20,7 @@ import java.security.*;
  * 
  * @author Petter Tomner
  */
-public class DeltastreamClient {
+public class DeltastreamClient implements Runnable{
     //this is a client that receives part from the swarm and puts them together to a generic byte stream
 
     /**
@@ -32,8 +32,9 @@ public class DeltastreamClient {
      *
      * @param args
      */
-    public static void main(String args[]){
-        config = new Config(args);
+    @Override
+    public void run(){
+        config = new Config(null);
         Broadcast broadcast = config.CreateBroadcast();
         broadcast.config = config;
 

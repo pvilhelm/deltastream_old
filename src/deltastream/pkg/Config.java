@@ -23,7 +23,7 @@ public class Config {
     /**
      *
      */
-        public static int inputStreamPort = 1081;  //the port listening the extrenal stream to be broadcasted
+    public static int inputStreamPort = 1081;  //the port listening the extrenal stream to be broadcasted
 
     /**
      *
