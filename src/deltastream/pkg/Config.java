@@ -81,7 +81,11 @@ public class Config {
     
     public static double UDPBroadcastWaitCoeff = 0.8;
     
-    Config(String[] args){
+    public static String rootNodeIP = "";
+    public static int rootNodePort = inputStreamPort;
+    
+    
+    Config(){
         //arguments go here TODO
     }
     

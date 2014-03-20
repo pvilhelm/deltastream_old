@@ -53,7 +53,7 @@ public class UploadHandler implements Runnable{
                 continue;
             }
             if(clientToUploadTo==null){
-                System.out.println("ClientToupload to null");
+                //System.out.println("ClientToupload to null");
                 continue;
             }
                  

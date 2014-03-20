@@ -27,24 +27,22 @@ public class DeltastreamServer implements Runnable{
     /**
      *
      */
-    public static Config config;
+    public Config config;
+    volatile public boolean runServer;
+    
+    DeltastreamServer(Config config){
+        this.config = config; 
+    }
 
     /**
      *
      * @param args
      */
     public void run() {
-        // TODO code application logic here
-        config = new Config(null);
+        
         Broadcast broadcast = config.CreateBroadcast(); //creates a broadcast object from the config
         broadcast.config = config;
 
-        /*
-        ReadInputStream readInputStream = new ReadInputStream(BufferedInDataStream, broadcast);
-        Thread readInputStreamThread = new Thread(readInputStream);
-        readInputStreamThread.start();
-        */
-        
         //Clean up the list of requested parts every 5 second. 
         Timer timer2 = new Timer("Clean Rq list");
         timer2.schedule(new CleanRqList(broadcast), 5000, 5000);//
@@ -63,25 +61,13 @@ public class DeltastreamServer implements Runnable{
         catch(Exception ee){
             System.out.println("Couldn't set up Client Server Socket"+ee);
         }
-
-        //init upload handler
-        //will upload to known clients at "random"==smart algortim
-
-        /*ListOfClients.Client client2 = broadcast.listOfClients.AddClient("94.254.51.17");
-        Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
-        thread.start();*/
-        
-        try{
-            Thread.sleep(2000);
-        }
-        catch(Exception ee){}
-        
+    
         UploadHandler uploadHandler = new UploadHandler(broadcast);
         Thread uploadHandlerThread = new Thread(uploadHandler,"Handle uploads");
         uploadHandlerThread.start();
         
          //w8 for new incoming connections 
-        for(;;){
+        while(runServer){
             Socket clientSocket;
             try{
                 clientSocket = clientServerS.accept();
@@ -91,6 +77,9 @@ public class DeltastreamServer implements Runnable{
                 clientSocket.setReceiveBufferSize(1000000);
                 clientSocket.setSoTimeout(0); ///<--remeber to remove
             }
+            catch ( InterruptedIOException ie ) {  
+                break;  
+            }  
             catch(Exception ee){
                 System.out.println("Couldn't accept incoming client socket request");
                 continue;
@@ -120,6 +109,7 @@ public class DeltastreamServer implements Runnable{
             else
                 System.out.println("Error: Thread and/or connection allready exists");
         }
+        //TODO efterbehandling server
     }   
 }
 

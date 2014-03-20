@@ -36,7 +36,7 @@ public class ConnectToClient implements Runnable{
     
     @Override
     public void run(){
-        
+        //TODO add option to specify port for the client ...
         synchronized(client){ //TODO should be "thread making lock" instead
             if(client.dlThread != null && client.dlThread.isAlive())
                 return;

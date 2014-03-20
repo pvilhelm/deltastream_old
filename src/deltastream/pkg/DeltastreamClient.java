@@ -26,15 +26,16 @@ public class DeltastreamClient implements Runnable{
     /**
      *
      */
-        public static Config config;
+    public Config config;
+    volatile public boolean runClient = true;
+    DeltastreamClient(Config config){
+        this.config = config; 
+    }
     
-    /**
-     *
-     * @param args
-     */
+    
     @Override
     public void run(){
-        config = new Config(null);
+
         Broadcast broadcast = config.CreateBroadcast();
         broadcast.config = config;
 
@@ -45,30 +46,32 @@ public class DeltastreamClient implements Runnable{
         catch(Exception ee){
             System.out.println("Couldn't set up Client Server Socket"+ee);
         }
-        
+
         //Clean up the list of requested parts every 5 second. 
         Timer timer2 = new Timer("Clean Rq list");
         timer2.schedule(new CleanRqList(broadcast), 5000, 5000);//
-        
+
         //init upload handler
         UploadHandler uploadHandler = new UploadHandler(broadcast);
         Thread uploadHandlerThread = new Thread(uploadHandler,"Upload Handler");
         uploadHandlerThread.start();
-        
-        ListOfClients.Client client2 = broadcast.listOfClients.AddClient("85.24.167.217");
-        Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
-        thread.start();
-        
+
+        if(Config.rootNodeIP!=""){
+            ListOfClients.Client client2 = broadcast.listOfClients.AddClient(Config.rootNodeIP);
+            Thread thread = new Thread(new ConnectToClient(client2,broadcast),"Make connection thread");
+            thread.start();
+        }
         /*OutputStreamServer outputStreamServer = new OutputStreamServer(broadcast);
         Thread outputStreamServerThread = new Thread(outputStreamServer,"OutputStreamServer");
         outputStreamServerThread.start();*/
-        
+
         OutputStreamServerUDP outputStreamServerUDP = new OutputStreamServerUDP(broadcast);
         Thread outputStreamServerUDPThread = new Thread(outputStreamServerUDP,"OutputStreamServerUDP");
         outputStreamServerUDPThread.start();
-        
+
         //w8 for new connections 
-        for(;;){
+
+        while(runClient){
             Socket clientSocket;
             try{
                 clientSocket = clientServerS.accept();
@@ -78,6 +81,9 @@ public class DeltastreamClient implements Runnable{
                 clientSocket.setReceiveBufferSize(1000000);
                 clientSocket.setSoTimeout(0); ///<--remeber to remove
             }
+            catch( InterruptedIOException ie ) {  
+                break;  
+            }  
             catch(Exception ee){
                 System.out.println("Couldn't accept incoming client socket request");
                 continue;
@@ -90,8 +96,7 @@ public class DeltastreamClient implements Runnable{
                 }
                 else{
                     client = broadcast.listOfClients.clientHashtable.get(clientIp);
-                }
-            
+                }           
             client.socket = clientSocket; 
             }
             //creates thread for handling the client
@@ -108,5 +113,9 @@ public class DeltastreamClient implements Runnable{
             else
                 System.out.println("Error: Thread and/or connection allready exists");
         }
+        
+        
+        //TODO efterbehandling säg hejdå osv
+        
     }
 }
