@@ -28,7 +28,7 @@ public class DeltastreamServer implements Runnable{
      *
      */
     public Config config;
-    volatile public boolean runServer;
+    volatile public boolean runServer = true;
     
     DeltastreamServer(Config config){
         this.config = config; 

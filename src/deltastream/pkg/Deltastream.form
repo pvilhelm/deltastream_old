@@ -138,8 +138,14 @@
               </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="targetIP">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="A IP of a client or server in the broadcast of interest"/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="targetPort">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" value="The corresponding port to that IP"/>
+              </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="targetPortActionPerformed"/>
               </Events>
@@ -147,7 +153,8 @@
             <Component class="javax.swing.JTextField" name="listenPort">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" value="1081"/>
+                <Property name="text" type="java.lang.String" value="1082"/>
+                <Property name="toolTipText" type="java.lang.String" value="The port on this client to which external clients will connect"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listenPortActionPerformed"/>
@@ -157,12 +164,14 @@
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="4444"/>
+                <Property name="toolTipText" type="java.lang.String" value="The corresponding port to that IP"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="outputIP">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="127.0.0.1"/>
+                <Property name="toolTipText" type="java.lang.String" value="The IP address to which the downloaded stream will be releyed to (127.0.0.1 is this computer)"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="outputIPActionPerformed"/>
@@ -258,7 +267,8 @@
             <Component class="javax.swing.JTextField" name="sourceInputPort">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" value="4444"/>
+                <Property name="text" type="java.lang.String" value="1081"/>
+                <Property name="toolTipText" type="java.lang.String" value="The port to which the source stream should connect to"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sourceInputPortActionPerformed"/>
@@ -267,7 +277,8 @@
             <Component class="javax.swing.JTextField" name="externalListenPort">
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
-                <Property name="text" type="java.lang.String" value="1081"/>
+                <Property name="text" type="java.lang.String" value="1082"/>
+                <Property name="toolTipText" type="java.lang.String" value="The port the clients will connect to on this server"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
@@ -279,6 +290,7 @@
               <Properties>
                 <Property name="horizontalAlignment" type="int" value="4"/>
                 <Property name="text" type="java.lang.String" value="100"/>
+                <Property name="toolTipText" type="java.lang.String" value="The period for sampling the input stream in milli seconds (ms = s/1000)"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel6">

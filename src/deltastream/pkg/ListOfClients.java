@@ -282,7 +282,8 @@ public class ListOfClients{
                 myNewestPartId = broadcast.parts.newestPartId;
                 myPartsBitSet = broadcast.parts.GetPartsAsBitSet();
             }
-            /////
+            BitSet answerBitSet = new BitSet();
+            
             int diff;
             synchronized(bitFieldParts){
                 diff = myOldestPartId-partIdOffset;
@@ -295,8 +296,8 @@ public class ListOfClients{
                     } 
 
                 }
-                else{
-                   myPartsBitSet.clear(0, diff);
+                else{//the other client got newer oldest parts
+                   
 
                    for(int i=0;i<myPartsBitSet.length()-diff;i++){
                         if(!((myPartsBitSet.get(i+diff) ^ bitFieldParts.get(i)) & bitFieldParts.get(i)))

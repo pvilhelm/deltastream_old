@@ -70,6 +70,9 @@ public class Deltastream extends javax.swing.JFrame {
             }
         });
 
+        targetIP.setToolTipText("A IP of a client or server in the broadcast of interest");
+
+        targetPort.setToolTipText("The corresponding port to that IP");
         targetPort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 targetPortActionPerformed(evt);
@@ -77,7 +80,8 @@ public class Deltastream extends javax.swing.JFrame {
         });
 
         listenPort.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        listenPort.setText("1081");
+        listenPort.setText("1082");
+        listenPort.setToolTipText("The port on this client to which external clients will connect");
         listenPort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 listenPortActionPerformed(evt);
@@ -86,9 +90,11 @@ public class Deltastream extends javax.swing.JFrame {
 
         outputPort.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         outputPort.setText("4444");
+        outputPort.setToolTipText("The corresponding port to that IP");
 
         outputIP.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         outputIP.setText("127.0.0.1");
+        outputIP.setToolTipText("The IP address to which the downloaded stream will be releyed to (127.0.0.1 is this computer)");
         outputIP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 outputIPActionPerformed(evt);
@@ -162,7 +168,8 @@ public class Deltastream extends javax.swing.JFrame {
         jLabel2.setText("Source Input Port");
 
         sourceInputPort.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        sourceInputPort.setText("4444");
+        sourceInputPort.setText("1081");
+        sourceInputPort.setToolTipText("The port to which the source stream should connect to");
         sourceInputPort.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 sourceInputPortActionPerformed(evt);
@@ -170,12 +177,14 @@ public class Deltastream extends javax.swing.JFrame {
         });
 
         externalListenPort.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        externalListenPort.setText("1081");
+        externalListenPort.setText("1082");
+        externalListenPort.setToolTipText("The port the clients will connect to on this server");
 
         jLabel5.setText("Extrenal Listen Port");
 
         sampleTime.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         sampleTime.setText("100");
+        sampleTime.setToolTipText("The period for sampling the input stream in milli seconds (ms = s/1000)");
 
         jLabel6.setText("Sample time (ms)");
 
@@ -317,7 +326,7 @@ public class Deltastream extends javax.swing.JFrame {
         
         Config.inputStreamPort = Integer.parseInt(inputStreamPortStr);
         Config.timeLimit = Integer.parseInt(sampleTimeStr);
-        Config.inputStreamPort = Integer.parseInt(externalListenPortStr);
+        Config.clientServerSocketPort = Integer.parseInt(externalListenPortStr);
         config = new Config();
         
         server = new DeltastreamServer(config);
