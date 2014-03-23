@@ -289,31 +289,36 @@ public class ListOfClients{
                 diff = myOldestPartId-partIdOffset;
                  
                 
-                if(diff>=0){
-                    for(int i=0;i<bitFieldParts.length()-diff;i++){
-                        if(!((myPartsBitSet.get(i) ^ bitFieldParts.get(i+diff)) & bitFieldParts.get(i+diff)))
-                            myPartsBitSet.clear(i); 
+                if(diff<0){
+                    for(int i=-diff;i<bitFieldParts.length()-diff;i++){
+                        if(((myPartsBitSet.get(i) ^ bitFieldParts.get(i+diff)) & bitFieldParts.get(i+diff)))
+                            answerBitSet.set(i); 
                     } 
 
                 }
                 else{//the other client got newer oldest parts
                    
 
-                   for(int i=0;i<myPartsBitSet.length()-diff;i++){
-                        if(!((myPartsBitSet.get(i+diff) ^ bitFieldParts.get(i)) & bitFieldParts.get(i)))
-                            myPartsBitSet.clear(i+diff);  
+                   for(int i=0;i<bitFieldParts.length()-diff;i++){
+                        if(((myPartsBitSet.get(i) ^ bitFieldParts.get(i-diff)) & bitFieldParts.get(i-diff)))
+                            answerBitSet.set(i);  
                     }    
                 }
             }
             int offset=0;
             if(diff<0)
                 offset = diff;
+            int size = answerBitSet.size();
+            int firstIndex = answerBitSet.nextSetBit(0);
+            int lastIndex = answerBitSet.previousSetBit(size);
+            if(firstIndex==-1)
+                return -1;
             
-            int indexRand = rand.nextInt(myNewestPartId-myOldestPartId-offset)+offset;
+            int indexRand = rand.nextInt(lastIndex-firstIndex)+firstIndex;
             
-            int partNrRnd = myPartsBitSet.previousSetBit(indexRand);
+            int partNrRnd = answerBitSet.previousSetBit(indexRand);
             if(partNrRnd==-1)
-                partNrRnd = myPartsBitSet.nextSetBit(indexRand);
+                partNrRnd = answerBitSet.nextSetBit(indexRand);
             if(partNrRnd==-1)
                 return -1;
             return partNrRnd+myOldestPartId;
